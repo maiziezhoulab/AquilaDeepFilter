@@ -6,20 +6,8 @@ github:sanidhyamangal
 from typing import Tuple
 import tensorflow as tf  # for deep learning stuff
 
-
-class BaseNetModel(tf.keras.models.Model):
-    preprocess_input = None
-    model_layer = None
-
-    def _assert_is_preprocess_input_defined(self):
-        assert self.preprocess_input is not None, (
-            "`preprocess_input` attr not defined in the %s",
-            self.__class__.__name__)
-
-    def _assert_is_model_layer_defined(self):
-        assert self.model_layer is not None, (
-            "`model_layer` attr not defined in the %s",
-            self.__class__.__name__)
+class XceptionNetModel(tf.keras.models.Model):
+    model_layer = tf.keras.applications.xception.Xception
 
     def __init__(self,
                  img_shape: Tuple[int],
@@ -28,10 +16,6 @@ class BaseNetModel(tf.keras.models.Model):
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
-
-        # assert required params
-        self._assert_is_preprocess_input_defined()
-        self._assert_is_model_layer_defined()()
 
         # define preprocessing arch for performing the data augmentation tasks
         _pre_model_arch = [
@@ -48,9 +32,9 @@ class BaseNetModel(tf.keras.models.Model):
         self.preprocess = tf.keras.models.Sequential(_pre_model_arch)
 
         # define base model for the training purpose
-        self.base_model = self.model_layer(input_shape=img_shape,
-                                           include_top=False,
-                                           weights='imagenet')
+        self.base_model = tf.keras.applications.Xception(input_shape=img_shape,
+                                               include_top=False,
+                                               weights='imagenet')
         # freeze the base models to restrict further training
         self.base_model.trainable = False
 
@@ -67,7 +51,9 @@ class BaseNetModel(tf.keras.models.Model):
             tf.keras.layers.Dense(num_classes)
         ])
 
-    def call(self, inputs, training, mask):
+        self.preprocess_input = tf.keras.applications.xception.preprocess_input
+
+    def call(self, inputs, training):
         # call to the preprocessing input unit for the model nased preprocessing
         x = self.preprocess_input(inputs)
 
@@ -80,8 +66,3 @@ class BaseNetModel(tf.keras.models.Model):
 
         # return the dataset for the
         return x
-
-
-class XceptionNetModel(BaseNetModel):
-    preprocess_input = tf.keras.applications.xception.preprocess_input
-    model_layer = tf.keras.applications.xception.Xception
