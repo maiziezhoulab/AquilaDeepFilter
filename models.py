@@ -4,7 +4,9 @@ github:sanidhyamangal
 """
 
 from typing import Tuple
+
 import tensorflow as tf  # for deep learning stuff
+
 
 class XceptionNetModel(tf.keras.models.Model):
     model_layer = tf.keras.applications.xception.Xception

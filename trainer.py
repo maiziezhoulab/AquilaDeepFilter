@@ -2,9 +2,10 @@
 author:Sanidhya Mangal
 github:sanidhyamangal
 """
-from typing import Optional
-import tensorflow as tf  # for deep learning
 import os  # for os related ops
+from typing import Optional
+
+import tensorflow as tf  # for deep learning
 
 
 class ModelManager(tf.Module):
