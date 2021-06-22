@@ -9,3 +9,4 @@
 ### 2021-06-22
 - added: data loader to load images from the file directories in a form of image tensor
 - completed data loading pipeline
+- added: driver code for training ops
