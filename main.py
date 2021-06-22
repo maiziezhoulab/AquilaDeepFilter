@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     model = XceptionNetModel(img_shape=(244, 244, 3),
                              num_classes=len(train_dataset_loader.root_labels))
-    model_manager = ModelManager(name="Xception Net")
+    model_manager = ModelManager(name="XceptionNet")
 
     train_dataset = train_dataset_loader.create_dataset(
         batch_size=args.batch_size,
@@ -74,6 +74,7 @@ if __name__ == "__main__":
     model_manager.train(
         model,
         loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        learning_rate=args.lr,
         trainer_dataset=train_dataset,
         validation_dataset=validation_dataset,
         check_point_dir=args.checkpoint_dir,
