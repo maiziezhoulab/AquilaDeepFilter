@@ -79,5 +79,4 @@ if __name__ == "__main__":
         validation_dataset=validation_dataset,
         check_point_dir=args.checkpoint_dir,
         tensorboard_log=args.tensorboard_log_dir,
-        epochs=args.epoch
-    )
+        epochs=args.epoch)

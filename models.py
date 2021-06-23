@@ -8,8 +8,8 @@ from typing import Tuple
 import tensorflow as tf  # for deep learning stuff
 
 
-class XceptionNetModel(tf.keras.models.Model):
-    model_layer = tf.keras.applications.xception.Xception
+class BaseNetModel(tf.keras.models.Model):
+    model_config = {}
 
     def __init__(self,
                  img_shape: Tuple[int],
@@ -18,6 +18,10 @@ class XceptionNetModel(tf.keras.models.Model):
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
+
+        # checker for model param types
+        self._check_config_hyperparams('model_layer')
+        self._check_config_hyperparams('preprocess_input')
 
         # define preprocessing arch for performing the data augmentation tasks
         _pre_model_arch = [
@@ -34,9 +38,8 @@ class XceptionNetModel(tf.keras.models.Model):
         self.preprocess = tf.keras.models.Sequential(_pre_model_arch)
 
         # define base model for the training purpose
-        self.base_model = tf.keras.applications.Xception(input_shape=img_shape,
-                                               include_top=False,
-                                               weights='imagenet')
+        self.base_model = self.model_config.get('model_layer')(
+            input_shape=img_shape, include_top=False, weights='imagenet')
         # freeze the base models to restrict further training
         self.base_model.trainable = False
 
@@ -53,7 +56,20 @@ class XceptionNetModel(tf.keras.models.Model):
             tf.keras.layers.Dense(num_classes)
         ])
 
-        self.preprocess_input = tf.keras.applications.xception.preprocess_input
+        self.preprocess_input = self.model_config.get('preprocess_input')
+
+    def _check_config_hyperparams(self,
+                                  param_name: str,
+                                  check_callable: bool = True) -> None:
+        _model_layer = self.model_config.get(param_name, '')
+
+        if not _model_layer:
+            raise KeyError(
+                f"{param_name} needs to be passed to generate a model architecture"
+            )
+
+        if not callable(_model_layer):
+            raise TypeError(f"{param_name} must be a callable object")
 
     def call(self, inputs, training):
         # call to the preprocessing input unit for the model nased preprocessing
@@ -68,3 +84,10 @@ class XceptionNetModel(tf.keras.models.Model):
 
         # return the dataset for the
         return x
+
+
+class XceptionNetModel(BaseNetModel):
+    model_config = {
+        'model_layer': tf.keras.applications.Xception,
+        'preprocess_input': tf.keras.applications.xception.preprocess_input
+    }

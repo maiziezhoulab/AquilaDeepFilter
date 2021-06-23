@@ -10,3 +10,7 @@
 - added: data loader to load images from the file directories in a form of image tensor
 - completed data loading pipeline
 - added: driver code for training ops
+
+### 2021-06-23
+- feat: reimplemented base model arch
+- updated: XceptionNet model arch based on base model arch
