@@ -14,3 +14,4 @@
 ### 2021-06-23
 - feat: reimplemented base model arch
 - updated: XceptionNet model arch based on base model arch
+- added: architecture for DenseNet121, ResNet151V2, EfficientNetB0 and VGG16

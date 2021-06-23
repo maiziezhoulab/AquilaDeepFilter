@@ -91,3 +91,31 @@ class XceptionNetModel(BaseNetModel):
         'model_layer': tf.keras.applications.Xception,
         'preprocess_input': tf.keras.applications.xception.preprocess_input
     }
+
+
+class ResnetV2Model(BaseNetModel):
+    model_config = {
+        "model_layer": tf.keras.applications.ResNet152V2,
+        "preprocess_input": tf.keras.applications.resnet_v2.preprocess_input
+    }
+
+
+class DenseNetModel(BaseNetModel):
+    model_config = {
+        "model_layer": tf.keras.applications.DenseNet121,
+        "preprocess_input": tf.keras.applications.densenet.preprocess_input
+    }
+
+
+class VGG16Model(BaseNetModel):
+    model_config = {
+        "model_layer": tf.keras.applications.VGG16,
+        "preprocess_input": tf.keras.applications.vgg16.preprocess_input
+    }
+
+
+class EfficientNetB0Model(BaseNetModel):
+    model_config = {
+        "model_layer": tf.keras.applications.EfficientNetB0,
+        "preprocess_input": tf.keras.applications.efficientnet.preprocess_input
+    }
