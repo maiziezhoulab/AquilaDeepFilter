@@ -13,11 +13,11 @@ from trainer import ModelManager  # model manager for handing all the ops
 from datapipeline.load_imageds import LoadData  # model pipeline for loading image datasets
 
 MODEL_ARCH = {
-    "xception":XceptionNetModel,
-    "densenet":DenseNetModel,
+    "xception": XceptionNetModel,
+    "densenet": DenseNetModel,
     "vgg": VGG16Model,
-    "efficientnet":EfficientNetB0Model,
-    "resnet":ResnetV2Model
+    "efficientnet": EfficientNetB0Model,
+    "resnet": ResnetV2Model
 }
 
 if __name__ == "__main__":
@@ -31,7 +31,10 @@ if __name__ == "__main__":
     parser_train = subparsers.add_parser('train',
                                          help='train the classification model')
     # parser_predict = subparsers.add_parser('predict', help='make predications for candidate SVs')
-    parser_train.add_argument("--model_arch", type="str", choices=list(MODEL_ARCH.keys()))
+    parser_train.add_argument(
+        "--model_arch",
+        choices=["xception", "densenet", "efficientnet", "vgg", "resnet"],
+        default="xception")
     parser_train.add_argument('--epoch',
                               type=int,
                               default=2,
@@ -62,9 +65,11 @@ if __name__ == "__main__":
     train_dataset_loader = LoadData(path=args.path_to_train_dir)
     val_dataset_loader = LoadData(path=args.path_to_eval_dir)
 
-    model = MODEL_ARCH.get(args.model_arch,XceptionNetModel)(img_shape=(244, 244, 3),
-                             num_classes=len(train_dataset_loader.root_labels))
-    model_manager = ModelManager(name="XceptionNet")
+    model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
+        img_shape=(244, 244, 3),
+        num_classes=len(train_dataset_loader.root_labels))
+    print(f"{'='*30}{args.model_arch}{'='*30}")
+    model_manager = ModelManager(name=args.model_arch)
 
     train_dataset = train_dataset_loader.create_dataset(
         batch_size=args.batch_size,
