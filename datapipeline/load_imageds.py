@@ -58,7 +58,7 @@ class LoadData(object):
         # read image into a raw format
         raw_image = tf.io.read_file(image_path)
         # decode the image
-        decode_image = tf.image.decode_jpeg(raw_image, channels=3)
+        decode_image = tf.image.decode_png(raw_image, channels=3)
 
         # return the resized images
         return tf.image.resize(decode_image, self.image_shape)
