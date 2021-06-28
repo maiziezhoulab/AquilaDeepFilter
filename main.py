@@ -54,6 +54,11 @@ if __name__ == "__main__":
                               required=True,
                               help='path to evaluation dataset directory')
     parser_train.add_argument(
+        "--fine_tune_at",
+        type=int,
+        default=0,
+        help="fine tune network from the layer, default to none")
+    parser_train.add_argument(
         '--checkpoint_dir',
         required=True,
         help='path to directory where checkpoints needs to be saved')
@@ -61,22 +66,34 @@ if __name__ == "__main__":
                               required=True,
                               help='tensorboard summary')
 
+    # parse the args from arg parsers
     args = parser_train.parse_args()
+
+    # define data loader for the validation and trainer set
     train_dataset_loader = LoadData(path=args.path_to_train_dir)
     val_dataset_loader = LoadData(path=args.path_to_eval_dir)
 
+    # retrieve and define the model for the interconnection
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
         img_shape=(244, 244, 3),
-        num_classes=len(train_dataset_loader.root_labels))
+        num_classes=len(train_dataset_loader.root_labels),
+        fine_tune_at=args.fine_tune_at)
+    
+    # print the model arch name for the logs
     print(f"{'='*30}{args.model_arch}{'='*30}")
+
+    # init a model manager to start the training process
     model_manager = ModelManager(name=args.model_arch)
 
+    # prepare the training dataset for ingesting it into the model
     train_dataset = train_dataset_loader.create_dataset(
         batch_size=args.batch_size,
         autotune=AUTOTUNE,
         drop_remainder=True,
         prefetch=True,
         cache=True)
+    
+    # prepare validation dataset for the ingestion process
     validation_dataset = val_dataset_loader.create_dataset(
         batch_size=args.batch_size,
         autotune=AUTOTUNE,
@@ -84,6 +101,7 @@ if __name__ == "__main__":
         prefetch=True,
         cache=True)
 
+    # call train function for the training ops
     model_manager.train(
         model,
         loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),

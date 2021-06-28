@@ -9,7 +9,10 @@ import tensorflow as tf  # for deep learning stuff
 
 
 class BaseNetModel(tf.keras.models.Model):
-    model_config = {}
+    """
+    Base model for confining all the base logic for model arch defination and call function for overriding it. 
+    """
+    model_config = {} # model configs to be used to overriding the base layer and preprocessing units
 
     def __init__(self,
                  img_shape: Tuple[int],
@@ -61,6 +64,9 @@ class BaseNetModel(tf.keras.models.Model):
     def _check_config_hyperparams(self,
                                   param_name: str,
                                   check_callable: bool = True) -> None:
+        """
+        Function to check if the hyper param is defined or not during model initialization
+        """
         _model_layer = self.model_config.get(param_name, '')
 
         if not _model_layer:

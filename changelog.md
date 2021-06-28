@@ -16,3 +16,8 @@
 - updated: XceptionNet model arch based on base model arch
 - added: architecture for DenseNet121, ResNet151V2, EfficientNetB0 and VGG16
 - feat: added runner script and argument to select model architecture
+
+### 2021-06-28
+- added train test split script to split dataset into validation set and training set.
+- added comments and documentation in the main script runner
+- added parser for the fine tuning of the models
