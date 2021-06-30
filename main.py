@@ -8,16 +8,24 @@ from os import path  # for argument parsing
 
 import tensorflow as tf
 
-from models import XceptionNetModel, DenseNetModel, VGG16Model, EfficientNetB0Model, ResnetV2Model  # models for training
+from datapipeline.load_imageds import \
+    LoadData  # model pipeline for loading image datasets
+from models import (
+    DenseNetModel,
+    EfficientNetB0Model,  # models for training
+    ResnetV2Model,
+    VGG16Model,
+    XceptionNetModel,
+    MobileNetModel)
 from trainer import ModelManager  # model manager for handing all the ops
-from datapipeline.load_imageds import LoadData  # model pipeline for loading image datasets
 
 MODEL_ARCH = {
     "xception": XceptionNetModel,
     "densenet": DenseNetModel,
     "vgg": VGG16Model,
     "efficientnet": EfficientNetB0Model,
-    "resnet": ResnetV2Model
+    "resnet": ResnetV2Model,
+    "mobilenet": MobileNetModel
 }
 
 if __name__ == "__main__":
@@ -31,10 +39,12 @@ if __name__ == "__main__":
     parser_train = subparsers.add_parser('train',
                                          help='train the classification model')
     # parser_predict = subparsers.add_parser('predict', help='make predications for candidate SVs')
-    parser_train.add_argument(
-        "--model_arch",
-        choices=["xception", "densenet", "efficientnet", "vgg", "resnet"],
-        default="xception")
+    parser_train.add_argument("--model_arch",
+                              choices=[
+                                  "xception", "densenet", "efficientnet",
+                                  "vgg", "resnet", "mobilenet"
+                              ],
+                              default="xception")
     parser_train.add_argument('--epoch',
                               type=int,
                               default=2,
@@ -78,7 +88,7 @@ if __name__ == "__main__":
         img_shape=(244, 244, 3),
         num_classes=len(train_dataset_loader.root_labels),
         fine_tune_at=args.fine_tune_at)
-    
+
     # print the model arch name for the logs
     print(f"{'='*30}{args.model_arch}{'='*30}")
 
@@ -92,7 +102,7 @@ if __name__ == "__main__":
         drop_remainder=True,
         prefetch=True,
         cache=True)
-    
+
     # prepare validation dataset for the ingestion process
     validation_dataset = val_dataset_loader.create_dataset(
         batch_size=args.batch_size,

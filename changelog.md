@@ -21,3 +21,7 @@
 - added train test split script to split dataset into validation set and training set.
 - added comments and documentation in the main script runner
 - added parser for the fine tuning of the models
+
+### 2021-06-30
+- removed: preprocessing and data augmentation layer from the model
+- added: support for mobilenet version

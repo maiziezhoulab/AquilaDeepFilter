@@ -12,7 +12,8 @@ class BaseNetModel(tf.keras.models.Model):
     """
     Base model for confining all the base logic for model arch defination and call function for overriding it. 
     """
-    model_config = {} # model configs to be used to overriding the base layer and preprocessing units
+    model_config = {
+    }  # model configs to be used to overriding the base layer and preprocessing units
 
     def __init__(self,
                  img_shape: Tuple[int],
@@ -26,19 +27,21 @@ class BaseNetModel(tf.keras.models.Model):
         self._check_config_hyperparams('model_layer')
         self._check_config_hyperparams('preprocess_input')
 
+        #TODO: remove model arch
         # define preprocessing arch for performing the data augmentation tasks
-        _pre_model_arch = [
-            tf.keras.layers.experimental.preprocessing.RandomRotation(0.2)
-        ]
-        # add rescaling node if the present node is not added
-        _rescaling = kwargs.get('rescaling', False)
-        if _rescaling:
-            _pre_model_arch.append(
-                tf.keras.layers.experimental.preprocessing.Rescaling(
-                    1. / 127.5, offset=-1))
+        # _pre_model_arch = [
+        #     tf.keras.layers.L
+        # ]
 
-        # define preprocessing model right before input to the base model
-        self.preprocess = tf.keras.models.Sequential(_pre_model_arch)
+        # add rescaling node if the present node is not added
+        # _rescaling = kwargs.get('rescaling', False)
+        # if _rescaling:
+        #     _pre_model_arch.append(
+        #         tf.keras.layers.experimental.preprocessing.Rescaling(
+        #             1. / 127.5, offset=-1))
+
+        # # define preprocessing model right before input to the base model
+        # self.preprocess = tf.keras.models.Sequential(_pre_model_arch)
 
         # define base model for the training purpose
         self.base_model = self.model_config.get('model_layer')(
@@ -49,6 +52,9 @@ class BaseNetModel(tf.keras.models.Model):
         # check if fine tuning of model is required or not,
         # if required simply iterate it from the point
         if fine_tune_at:
+            print("=" * 100)
+            print(f"Fine tuning model from {fine_tune_at}")
+            print("=" * 100)
             for layer in self.base_model.layers[fine_tune_at:]:
                 layer.trainable = True
 
@@ -82,7 +88,7 @@ class BaseNetModel(tf.keras.models.Model):
         x = self.preprocess_input(inputs)
 
         # preprocessing layer called for data augmentation part
-        x = self.preprocess(x, training=training)
+        # x = self.preprocess(x, training=training)
         # called base model layer the base SOTA arch for learning the cardinal cases
         x = self.base_model(x, training=training)
         # call posterior ops to the base sota model to classify the images on specific dataset
@@ -124,4 +130,11 @@ class EfficientNetB0Model(BaseNetModel):
     model_config = {
         "model_layer": tf.keras.applications.EfficientNetB0,
         "preprocess_input": tf.keras.applications.efficientnet.preprocess_input
+    }
+
+
+class MobileNetModel(BaseNetModel):
+    model_config = {
+        "model_layer": tf.keras.applications.MobileNetV2,
+        "preprocess_input": tf.keras.applications.mobilenet.preprocess_input
     }
