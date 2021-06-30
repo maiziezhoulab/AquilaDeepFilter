@@ -49,3 +49,12 @@ class ModelManager(tf.Module):
             model.fit(trainer_dataset,
                       epochs=epochs,
                       callbacks=[_tb_callback, _model_check_points])
+
+    def predict(self, model:tf.keras.models.Model, checkpoint_dir:str, prediction_dataset:tf.data.Dataset ,output_dir:str) -> None:
+        
+        # load model checkpoints
+        if os.path.exists(checkpoint_dir):
+            model.load_weights(checkpoint_dir)
+            print(f"Loaded Weights from {checkpoint_dir} Sucessfully")
+        
+        _output_logits = model(prediction_dataset)

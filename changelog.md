@@ -25,3 +25,5 @@
 ### 2021-06-30
 - removed: preprocessing and data augmentation layer from the model
 - added: support for mobilenet version
+- added: prediction data loader for testing images
+- added: prediction routing in model manager

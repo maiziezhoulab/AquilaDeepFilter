@@ -12,8 +12,19 @@ from typing import Optional, Tuple
 # import tensorflow
 import tensorflow as tf
 
+class PreprocessMixin:
+    # function to make process the images
+    def process_image(self, image_path):
+        # read image into a raw format
+        raw_image = tf.io.read_file(image_path)
+        # decode the image
+        decode_image = tf.image.decode_png(raw_image, channels=3)
 
-class LoadData(object):
+        # return the resized images
+        return tf.image.resize(decode_image, self.image_shape)
+
+
+class LoadData(PreprocessMixin):
     """
     A data loader class for loading images from the respective dirs
     """
@@ -52,16 +63,6 @@ class LoadData(object):
         ]
 
         return all_images_labels
-
-    # function to make process the images
-    def process_image(self, image_path):
-        # read image into a raw format
-        raw_image = tf.io.read_file(image_path)
-        # decode the image
-        decode_image = tf.image.decode_png(raw_image, channels=3)
-
-        # return the resized images
-        return tf.image.resize(decode_image, self.image_shape)
 
     def create_dataset(self,
                        batch_size: int,
@@ -104,3 +105,23 @@ class LoadData(object):
             ds = ds.prefetch(prefetch)
 
         return ds
+
+
+class PredictionDataLoader(PreprocessMixin):
+    """ Data loader class for loading data as a prediction set """
+
+    def __init__(self, path, image_shape: Tuple[int] = (244, 244)) -> None:
+
+        # load root path
+        self.path_to_dir = Path(path)
+        self.image_shape = image_shape
+        self.all_images_path = [
+            str(path) for path in self.path_to_dir.glob("*/*")
+        ]
+
+    def create_dataset(self,autotune:Optional[int]=None):
+        image_ds = tf.data.Dataset.from_tensor_slices(self.all_images_path)
+
+        image_ds.map(self.process_image, num_parallel_calls=autotune)
+
+        return image_ds
