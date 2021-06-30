@@ -12,6 +12,7 @@ from typing import Optional, Tuple
 # import tensorflow
 import tensorflow as tf
 
+
 class PreprocessMixin:
     # function to make process the images
     def process_image(self, image_path):
@@ -109,17 +110,16 @@ class LoadData(PreprocessMixin):
 
 class PredictionDataLoader(PreprocessMixin):
     """ Data loader class for loading data as a prediction set """
-
     def __init__(self, path, image_shape: Tuple[int] = (244, 244)) -> None:
 
         # load root path
         self.path_to_dir = Path(path)
         self.image_shape = image_shape
         self.all_images_path = [
-            str(path) for path in self.path_to_dir.glob("*/*")
+            str(path) for path in self.path_to_dir.glob("*.png")
         ]
 
-    def create_dataset(self,autotune:Optional[int]=None):
+    def create_dataset(self, autotune: Optional[int] = None):
         image_ds = tf.data.Dataset.from_tensor_slices(self.all_images_path)
 
         image_ds.map(self.process_image, num_parallel_calls=autotune)
