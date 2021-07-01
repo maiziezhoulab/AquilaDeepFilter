@@ -32,3 +32,6 @@
 - fixed: image shape to 224x224 in models, image loaders, etc. 
 - [WIP] for prediction set of data, added model compiling state for the prediction state. 
 - fixed: prediction data loader for pointing data loader and added cache, prefetch in it.
+- added: utils for writing data, creation of dirs and spiting string for result file
+- completed: prediction co-routine for generation of prediction results
+- added: parser for prediction part.

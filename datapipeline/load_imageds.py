@@ -128,9 +128,8 @@ class PredictionDataLoader(PreprocessMixin):
 
         image_ds = tf.data.Dataset.from_tensor_slices(self.all_images_path)
 
-        image_ds = image_ds.map(
-            self.process_image,
-            num_parallel_calls=autotune).batch(batch_size)
+        image_ds = image_ds.map(self.process_image,
+                                num_parallel_calls=autotune).batch(batch_size)
 
         # check if cache is enabled or not
         if cache:

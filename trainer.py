@@ -3,7 +3,8 @@ author:Sanidhya Mangal
 github:sanidhyamangal
 """
 import os  # for os related ops
-from typing import Optional
+from typing import List, Optional
+from utils import create_folders_if_not_exists, extract_chromosome_info, spit_string_for_result_file
 
 import tensorflow as tf  # for deep learning
 
@@ -50,8 +51,12 @@ class ModelManager(tf.Module):
                       epochs=epochs,
                       callbacks=[_tb_callback, _model_check_points])
 
-    def predict(self, model: tf.keras.models.Model, checkpoint_dir: str,
-                prediction_dataset: tf.data.Dataset, output_dir: str) -> None:
+    def predict(self,
+                model: tf.keras.models.Model,
+                checkpoint_dir: str,
+                prediction_dataset: tf.data.Dataset,
+                output_file: str,
+                all_file_paths=List[str]) -> None:
 
         # load model checkpoints
         if os.path.exists(checkpoint_dir):
@@ -59,9 +64,19 @@ class ModelManager(tf.Module):
             print(f"Loaded Weights from {checkpoint_dir} Sucessfully")
 
         model.compile(optimizer=tf.keras.optimizers.Adam(),
-                      loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                      loss=tf.keras.losses.SparseCategoricalCrossentropy(
+                          from_logits=True),
                       metrics=['accuracy'])
-        
+
         _output = model.predict(prediction_dataset)
 
-        return _output
+        create_folders_if_not_exists(output_file)
+
+        fp = open(output_file, "w+")
+
+        for file_path, result in zip((all_file_paths), _output.numpy()):
+            fp.write(
+                spit_string_for_result_file(extract_chromosome_info(file_path),
+                                            result))
+
+        fp.close()
