@@ -150,27 +150,27 @@ if __name__ == "__main__":
         default=2,
         type=int)
 
-    # parse the args from arg parsers
-    args = parser_predict.parse_args()
-    prediction_data_loader = PredictionDataLoader(path=args.path_to_images)
-    prediction_ds = prediction_data_loader.create_dataset(args.batch_size,
-                                                          autotune=AUTOTUNE,
-                                                          cache=True,
-                                                          prefetch=True)
+    # # parse the args from arg parsers
+    # args = parser_predict.parse_args()
+    # prediction_data_loader = PredictionDataLoader(path=args.path_to_images)
+    # prediction_ds = prediction_data_loader.create_dataset(args.batch_size,
+    #                                                       autotune=AUTOTUNE,
+    #                                                       cache=True,
+    #                                                       prefetch=True)
 
-    # retrieve and define the model for the interconnection
-    model = MODEL_ARCH.get(args.model_arch,
-                           XceptionNetModel)(img_shape=(224, 224, 3),
-                                             num_classes=args.num_classes)
+    # # retrieve and define the model for the interconnection
+    # model = MODEL_ARCH.get(args.model_arch,
+    #                        XceptionNetModel)(img_shape=(224, 224, 3),
+    #                                          num_classes=args.num_classes)
 
-    # print the model arch name for the logs
-    print(f"{'='*30}{args.model_arch}{'='*30}")
+    # # print the model arch name for the logs
+    # print(f"{'='*30}{args.model_arch}{'='*30}")
 
-    # init a model manager to start the training process
-    model_manager = ModelManager(name=args.model_arch)
-    model_manager.predict(
-        model,
-        checkpoint_dir=args.checkpoint_dir,
-        prediction_dataset=prediction_ds,
-        output_file=args.output_file,
-        all_file_paths=prediction_data_loader.all_images_path)
+    # # init a model manager to start the training process
+    # model_manager = ModelManager(name=args.model_arch)
+    # model_manager.predict(
+    #     model,
+    #     checkpoint_dir=args.checkpoint_dir,
+    #     prediction_dataset=prediction_ds,
+    #     output_file=args.output_file,
+    #     all_file_paths=prediction_data_loader.all_images_path)
