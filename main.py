@@ -85,7 +85,7 @@ if __name__ == "__main__":
 
     # retrieve and define the model for the interconnection
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
-        img_shape=(244, 244, 3),
+        img_shape=(224, 224, 3),
         num_classes=len(train_dataset_loader.root_labels),
         fine_tune_at=args.fine_tune_at)
 

@@ -31,7 +31,7 @@ class LoadData(PreprocessMixin):
     """
 
     # constructor for loading data path
-    def __init__(self, path, image_shape: Tuple[int] = (244, 244)):
+    def __init__(self, path, image_shape: Tuple[int] = (224, 224)):
 
         # load root path
         self.path_to_dir = Path(path)
@@ -110,7 +110,7 @@ class LoadData(PreprocessMixin):
 
 class PredictionDataLoader(PreprocessMixin):
     """ Data loader class for loading data as a prediction set """
-    def __init__(self, path, image_shape: Tuple[int] = (244, 244)) -> None:
+    def __init__(self, path, image_shape: Tuple[int] = (224, 224)) -> None:
 
         # load root path
         self.path_to_dir = Path(path)
