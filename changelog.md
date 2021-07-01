@@ -27,3 +27,8 @@
 - added: support for mobilenet version
 - added: prediction data loader for testing images
 - added: prediction routing in model manager
+
+### 2021-07-01
+- fixed: image shape to 224x224 in models, image loaders, etc. 
+- [WIP] for prediction set of data, added model compiling state for the prediction state. 
+- fixed: prediction data loader for pointing data loader and added cache, prefetch in it.

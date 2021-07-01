@@ -119,9 +119,25 @@ class PredictionDataLoader(PreprocessMixin):
             str(path) for path in self.path_to_dir.glob("*.png")
         ]
 
-    def create_dataset(self, autotune: Optional[int] = None):
+    def create_dataset(self,
+                       batch_size: int,
+                       autotune: Optional[int] = None,
+                       **kwargs):
+        cache = kwargs.pop('cache', False)
+        prefetch = kwargs.pop('prefetch', False)
+
         image_ds = tf.data.Dataset.from_tensor_slices(self.all_images_path)
 
-        image_ds.map(self.process_image, num_parallel_calls=autotune)
+        image_ds = image_ds.map(
+            self.process_image,
+            num_parallel_calls=autotune).batch_size(batch_size)
+
+        # check if cache is enabled or not
+        if cache:
+            image_ds = image_ds.cache()
+
+        # check if prefetch is specified or not
+        if prefetch:
+            image_ds = image_ds.prefetch(prefetch)
 
         return image_ds

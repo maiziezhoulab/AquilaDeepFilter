@@ -58,4 +58,10 @@ class ModelManager(tf.Module):
             model.load_weights(checkpoint_dir)
             print(f"Loaded Weights from {checkpoint_dir} Sucessfully")
 
-        _output_logits = model(prediction_dataset)
+        model.compile(optimizer=tf.keras.optimizers.Adam(),
+                      loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+                      metrics=['accuracy'])
+        
+        _output = model.predict(prediction_dataset)
+
+        return _output
