@@ -13,7 +13,7 @@ def create_folders_if_not_exists(path: str) -> None:
         if path.startswith("/"):
             _path[0] = "/"
 
-    os.makedirs(os.path.join(*_path))
+    os.makedirs(os.path.join(*_path), exist_ok=True)
 
 
 def extract_chromosome_info(path: str) -> List[str]:
