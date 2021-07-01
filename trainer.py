@@ -68,13 +68,13 @@ class ModelManager(tf.Module):
                           from_logits=True),
                       metrics=['accuracy'])
 
-        _output = model.predict(prediction_dataset)
+        _output = tf.nn.softmax(model.predict(prediction_dataset),axis=1)
 
         create_folders_if_not_exists(output_file)
 
         fp = open(output_file, "w+")
 
-        for file_path, result in zip((all_file_paths), _output.numpy()):
+        for file_path, result in zip((all_file_paths), _output):
             fp.write(
                 spit_string_for_result_file(extract_chromosome_info(file_path),
                                             result))

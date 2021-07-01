@@ -7,13 +7,12 @@ from typing import List
 
 
 def create_folders_if_not_exists(path: str) -> None:
-
     if not os.path.exists(path):
         _path = path.split("/")[:-1]
         if path.startswith("/"):
             _path[0] = "/"
 
-    os.makedirs(os.path.join(*_path), exist_ok=True)
+        os.makedirs(os.path.join(*_path), exist_ok=True)
 
 
 def extract_chromosome_info(path: str) -> List[str]:
