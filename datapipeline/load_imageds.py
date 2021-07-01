@@ -130,7 +130,7 @@ class PredictionDataLoader(PreprocessMixin):
 
         image_ds = image_ds.map(
             self.process_image,
-            num_parallel_calls=autotune).batch_size(batch_size)
+            num_parallel_calls=autotune).batch(batch_size)
 
         # check if cache is enabled or not
         if cache:
