@@ -52,7 +52,7 @@ if __name__ == "__main__":
                                 required=True,
                                 help='path to prediction images directory')
     parser_predict.add_argument(
-        '--path_to_output_file',
+        '--output_file',
         required=True,
         help='path where output file needs to be saved')
 
