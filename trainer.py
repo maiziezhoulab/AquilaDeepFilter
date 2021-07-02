@@ -68,7 +68,7 @@ class ModelManager(tf.Module):
                           from_logits=True),
                       metrics=['accuracy'])
 
-        _output = tf.nn.softmax(model.predict(prediction_dataset),axis=1)
+        _output = tf.nn.softmax(model.predict(prediction_dataset), axis=1)
 
         create_folders_if_not_exists(output_file)
 

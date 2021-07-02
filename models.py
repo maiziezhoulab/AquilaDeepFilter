@@ -26,7 +26,7 @@ class BaseNetModel(tf.keras.models.Model):
         # checker for model param types
         self._check_config_hyperparams('model_layer')
         self._check_config_hyperparams('preprocess_input')
-
+        train_from_scratch = kwargs.get("from_scratch", False)
         #TODO: remove model arch
         # define preprocessing arch for performing the data augmentation tasks
         # _pre_model_arch = [
@@ -46,8 +46,13 @@ class BaseNetModel(tf.keras.models.Model):
         # define base model for the training purpose
         self.base_model = self.model_config.get('model_layer')(
             input_shape=img_shape, include_top=False, weights='imagenet')
-        # freeze the base models to restrict further training
-        self.base_model.trainable = False
+
+        if not train_from_scratch:
+            # freeze the base models to restrict further training
+            self.base_model.trainable = False
+            print("=" * 100)
+            print(f"Training Entire Model from Scratch")
+            print("=" * 100)
 
         # check if fine tuning of model is required or not,
         # if required simply iterate it from the point

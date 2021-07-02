@@ -61,6 +61,11 @@ if __name__ == "__main__":
     parser_train.add_argument('--path_to_eval_dir',
                               required=True,
                               help='path to evaluation dataset directory')
+    parser_train.add_argument('--train_from_scratch',
+                              type=bool,
+                              default=False,
+                              help='path to evaluation dataset directory')
+
     parser_train.add_argument(
         "--fine_tune_at",
         type=int,
@@ -85,7 +90,8 @@ if __name__ == "__main__":
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
         img_shape=(224, 224, 3),
         num_classes=len(train_dataset_loader.root_labels),
-        fine_tune_at=args.fine_tune_at)
+        fine_tune_at=args.fine_tune_at,
+        from_scratch=args.train_from_scratch)
 
     # print the model arch name for the logs
     print(f"{'='*30}{args.model_arch}{'='*30}")
