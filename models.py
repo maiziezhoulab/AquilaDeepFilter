@@ -19,7 +19,7 @@ class BaseNetModel(tf.keras.models.Model):
                  img_shape: Tuple[int],
                  num_classes: int,
                  fine_tune_at: int = 0,
-                 train_from_scratch: bool = False
+                 train_from_scratch: bool = False,
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
