@@ -91,7 +91,7 @@ if __name__ == "__main__":
         img_shape=(224, 224, 3),
         num_classes=len(train_dataset_loader.root_labels),
         fine_tune_at=args.fine_tune_at,
-        from_scratch=args.train_from_scratch)
+        train_from_scratch=args.train_from_scratch)
 
     # print the model arch name for the logs
     print(f"{'='*30}{args.model_arch}{'='*30}")

@@ -19,6 +19,7 @@ class BaseNetModel(tf.keras.models.Model):
                  img_shape: Tuple[int],
                  num_classes: int,
                  fine_tune_at: int = 0,
+                 train_from_scratch: bool = False
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -26,7 +27,6 @@ class BaseNetModel(tf.keras.models.Model):
         # checker for model param types
         self._check_config_hyperparams('model_layer')
         self._check_config_hyperparams('preprocess_input')
-        train_from_scratch = kwargs.get("from_scratch", False)
         #TODO: remove model arch
         # define preprocessing arch for performing the data augmentation tasks
         # _pre_model_arch = [
