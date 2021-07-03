@@ -24,6 +24,87 @@ MODEL_ARCH = {
     "mobilenet": MobileNetModel
 }
 
+
+def train_model(model_arch: str, epoch: str, batch_size: int, lr: float,
+                path_to_train_dir: str, path_to_eval_dir: str,
+                train_from_scratch: str, fine_tune_at: int,
+                checkpoint_dir: str, tensorboard_log_dir: str) -> None:
+    """
+    Helper function for train arg subparser to train the entire network
+    """
+    # define data loader for the validation and trainer set
+    train_dataset_loader = LoadData(path=path_to_train_dir)
+    val_dataset_loader = LoadData(path=path_to_eval_dir)
+
+    # retrieve and define the model for the interconnection
+    model = MODEL_ARCH.get(model_arch, XceptionNetModel)(
+        img_shape=(224, 224, 3),
+        num_classes=len(train_dataset_loader.root_labels),
+        fine_tune_at=fine_tune_at,
+        train_from_scratch=train_from_scratch)
+
+    # print the model arch name for the logs
+    print(f"{'='*30}{model_arch}{'='*30}")
+
+    # init a model manager to start the training process
+    model_manager = ModelManager(name=model_arch)
+
+    # prepare the training dataset for ingesting it into the model
+    train_dataset = train_dataset_loader.create_dataset(batch_size=batch_size,
+                                                        autotune=AUTOTUNE,
+                                                        drop_remainder=True,
+                                                        prefetch=True,
+                                                        cache=True)
+
+    # prepare validation dataset for the ingestion process
+    validation_dataset = val_dataset_loader.create_dataset(
+        batch_size=batch_size,
+        autotune=AUTOTUNE,
+        drop_remainder=True,
+        prefetch=True,
+        cache=True)
+
+    # call train function for the training ops
+    model_manager.train(
+        model,
+        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+        learning_rate=lr,
+        trainer_dataset=train_dataset,
+        validation_dataset=validation_dataset,
+        check_point_dir=checkpoint_dir,
+        tensorboard_log=tensorboard_log_dir,
+        epochs=epoch)
+
+
+def predict_run(model_arch: str, batch_size: int, path_to_images: str,
+                output_file: str, checkpoint_dir: str,
+                num_classes: int) -> None:
+    """Runner function for runing the prediction ops for generating prediction files for sv data"""
+
+    prediction_data_loader = PredictionDataLoader(path=path_to_images)
+    prediction_ds = prediction_data_loader.create_dataset(batch_size,
+                                                          autotune=AUTOTUNE,
+                                                          cache=True,
+                                                          prefetch=True)
+
+    # retrieve and define the model for the interconnection
+    model = MODEL_ARCH.get(model_arch,
+                           XceptionNetModel)(img_shape=(224, 224, 3),
+                                             num_classes=num_classes)
+
+    # print the model arch name for the logs
+    print(f"{'='*30}{model_arch}{'='*30}")
+
+    # init a model manager to start the training process
+    model_manager = ModelManager(name=model_arch)
+    model_manager.predict(
+        model,
+        checkpoint_dir=checkpoint_dir,
+        prediction_dataset=prediction_ds,
+        output_file=output_file,
+        all_file_paths=prediction_data_loader.all_images_path)
+
+
 if __name__ == "__main__":
     AUTOTUNE = tf.data.AUTOTUNE
     parser = argparse.ArgumentParser(
@@ -79,52 +160,7 @@ if __name__ == "__main__":
                               required=True,
                               help='tensorboard summary')
 
-    # parse the args from arg parsers
-    args = parser_train.parse_args()
-
-    # define data loader for the validation and trainer set
-    train_dataset_loader = LoadData(path=args.path_to_train_dir)
-    val_dataset_loader = LoadData(path=args.path_to_eval_dir)
-
-    # retrieve and define the model for the interconnection
-    model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
-        img_shape=(224, 224, 3),
-        num_classes=len(train_dataset_loader.root_labels),
-        fine_tune_at=args.fine_tune_at,
-        train_from_scratch=args.train_from_scratch)
-
-    # print the model arch name for the logs
-    print(f"{'='*30}{args.model_arch}{'='*30}")
-
-    # init a model manager to start the training process
-    model_manager = ModelManager(name=args.model_arch)
-
-    # prepare the training dataset for ingesting it into the model
-    train_dataset = train_dataset_loader.create_dataset(
-        batch_size=args.batch_size,
-        autotune=AUTOTUNE,
-        drop_remainder=True,
-        prefetch=True,
-        cache=True)
-
-    # prepare validation dataset for the ingestion process
-    validation_dataset = val_dataset_loader.create_dataset(
-        batch_size=args.batch_size,
-        autotune=AUTOTUNE,
-        drop_remainder=True,
-        prefetch=True,
-        cache=True)
-
-    # call train function for the training ops
-    model_manager.train(
-        model,
-        loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        learning_rate=args.lr,
-        trainer_dataset=train_dataset,
-        validation_dataset=validation_dataset,
-        check_point_dir=args.checkpoint_dir,
-        tensorboard_log=args.tensorboard_log_dir,
-        epochs=args.epoch)
+    parser_train.set_defaults(func=train_model)
 
     # arguments for predict section
     parser_predict.add_argument("--model_arch",
@@ -141,7 +177,7 @@ if __name__ == "__main__":
                                 required=True,
                                 help='path to prediction images directory')
     parser_predict.add_argument(
-        '--path_to_output_file',
+        '--output_file',
         required=True,
         help='path where output file needs to be saved')
 
@@ -156,27 +192,4 @@ if __name__ == "__main__":
         default=2,
         type=int)
 
-    # # parse the args from arg parsers
-    # args = parser_predict.parse_args()
-    # prediction_data_loader = PredictionDataLoader(path=args.path_to_images)
-    # prediction_ds = prediction_data_loader.create_dataset(args.batch_size,
-    #                                                       autotune=AUTOTUNE,
-    #                                                       cache=True,
-    #                                                       prefetch=True)
-
-    # # retrieve and define the model for the interconnection
-    # model = MODEL_ARCH.get(args.model_arch,
-    #                        XceptionNetModel)(img_shape=(224, 224, 3),
-    #                                          num_classes=args.num_classes)
-
-    # # print the model arch name for the logs
-    # print(f"{'='*30}{args.model_arch}{'='*30}")
-
-    # # init a model manager to start the training process
-    # model_manager = ModelManager(name=args.model_arch)
-    # model_manager.predict(
-    #     model,
-    #     checkpoint_dir=args.checkpoint_dir,
-    #     prediction_dataset=prediction_ds,
-    #     output_file=args.output_file,
-    #     all_file_paths=prediction_data_loader.all_images_path)
+    parser_predict.set_defaults(func=predict_run)

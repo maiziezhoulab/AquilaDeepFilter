@@ -35,3 +35,8 @@
 - added: utils for writing data, creation of dirs and spiting string for result file
 - completed: prediction co-routine for generation of prediction results
 - added: parser for prediction part.
+
+### 2021-07-04
+- fixed: parser based issues for using both trainer and prediction mode from main runner
+- deleted: seperate prediction runner 
+- added: runner functions for train and predict ops
