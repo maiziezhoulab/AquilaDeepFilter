@@ -40,3 +40,6 @@
 - fixed: parser based issues for using both trainer and prediction mode from main runner
 - deleted: seperate prediction runner 
 - added: runner functions for train and predict ops
+
+### 2021-07-05
+- fixed: arg parser errors

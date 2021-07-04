@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 """
 author:Sanidhya Mangal
 github:sanidhyamangal
@@ -193,3 +194,6 @@ if __name__ == "__main__":
         type=int)
 
     parser_predict.set_defaults(func=predict_run)
+
+    args = parser.parse_args()
+    args.func(args)
