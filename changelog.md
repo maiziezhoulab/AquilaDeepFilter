@@ -44,3 +44,4 @@
 ### 2021-07-05
 - fixed: arg parser errors
 - fixed: the arg parser params error
+- feat: added vanilla cnn model for testing out

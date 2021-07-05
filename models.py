@@ -3,9 +3,11 @@ author:Sanidhya Mangal
 github:sanidhyamangal
 """
 
+from functools import partial
 from typing import Tuple
 
-import tensorflow as tf  # for deep learning stuff
+import tensorflow as tf
+from tensorflow.python.keras.layers.core import Dense  # for deep learning stuff
 
 
 class BaseNetModel(tf.keras.models.Model):
@@ -143,3 +145,39 @@ class MobileNetModel(BaseNetModel):
         "model_layer": tf.keras.applications.MobileNetV2,
         "preprocess_input": tf.keras.applications.mobilenet.preprocess_input
     }
+
+class VanillaCNNModel(tf.keras.models.Model):
+    """
+    Vanilla CNN model for testing out the simple keras model
+    """
+
+    def __init__(self, num_classes:int ,img_shape:Tuple[int],padding:str="same",strides:Tuple[int]=(2,2),dropout:float=0.4,*args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        Conv2D = partial(tf.keras.layers.Conv2D, strides=strides, padding=padding, activation=tf.nn.relu)
+        Dropout = partial(tf.keras.layers.Dropout, rate=dropout)
+        MaxPool2D = partial(tf.keras.layers.MaxPool2D,pool_size=(2,2))
+
+        self.model = tf.keras.models.Sequential([
+            tf.keras.layers.Input(shape=[None, *img_shape]),
+            Conv2D(filters=32),
+            MaxPool2D(),
+            Dropout(),
+            Conv2D(filters=64),
+            MaxPool2D(),
+            Dropout(),
+            Conv2D(filters=64),
+            MaxPool2D(),
+            Dropout(),
+            Conv2D(filters=64,strides=(1,1)),
+            MaxPool2D(),
+            Dropout(),
+            Dense(units=1024),
+            Dropout(),
+            Dense(units=num_classes)
+        ])
+
+    def call(self, inputs, training):
+        output = self.model(inputs, training=training)
+
+        return output
