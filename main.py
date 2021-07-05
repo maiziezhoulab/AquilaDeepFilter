@@ -26,10 +26,9 @@ MODEL_ARCH = {
 }
 
 
-def train_model(model_arch: str, epoch: str, batch_size: int, lr: float,
-                path_to_train_dir: str, path_to_eval_dir: str,
-                train_from_scratch: str, fine_tune_at: int,
-                checkpoint_dir: str, tensorboard_log_dir: str) -> None:
+def train_model(model_arch, epoch, batch_size, lr, path_to_train_dir,
+                path_to_eval_dir, train_from_scratch, fine_tune_at,
+                checkpoint_dir, tensorboard_log_dir) -> None:
     """
     Helper function for train arg subparser to train the entire network
     """
@@ -124,42 +123,52 @@ if __name__ == "__main__":
                                   "xception", "densenet", "efficientnet",
                                   "vgg", "resnet", "mobilenet"
                               ],
-                              default="xception")
+                              default="xception",
+                              dest="model_arch")
     parser_train.add_argument('--epoch',
                               type=int,
                               default=2,
-                              help='number of total epoches')
+                              help='number of total epoches',
+                              dest="epoch")
     parser_train.add_argument('--batch_size',
                               type=int,
                               default=64,
-                              help='number of samples in one batch')
+                              help='number of samples in one batch',
+                              dest="batch_size")
     parser_train.add_argument('--lr',
                               type=float,
                               default=0.001,
-                              help='initial learning rate for adam')
+                              help='initial learning rate for adam',
+                              dest="lr")
     parser_train.add_argument('--path_to_train_dir',
                               required=True,
-                              help='path to training dataset directory')
+                              help='path to training dataset directory',
+                              dest="path_to_train_dir")
     parser_train.add_argument('--path_to_eval_dir',
                               required=True,
-                              help='path to evaluation dataset directory')
+                              help='path to evaluation dataset directory',
+                              dest="path_to_eval_dir")
     parser_train.add_argument('--train_from_scratch',
                               type=bool,
                               default=False,
-                              help='path to evaluation dataset directory')
+                              help='path to evaluation dataset directory',
+                              dest="train_from_scratch")
 
     parser_train.add_argument(
         "--fine_tune_at",
         type=int,
         default=0,
-        help="fine tune network from the layer, default to none")
+        help="fine tune network from the layer, default to none",
+        dest="fine_tune_at")
     parser_train.add_argument(
         '--checkpoint_dir',
         required=True,
-        help='path to directory where checkpoints needs to be saved')
+        help='path to directory where checkpoints needs to be saved',
+        dest="checkpoint_dir")
     parser_train.add_argument('--tensorboard_log_dir',
                               required=True,
-                              help='tensorboard summary')
+                              help='tensorboard summary',
+                              dest="tensorboard_log_dir")
 
     parser_train.set_defaults(func=train_model)
 
