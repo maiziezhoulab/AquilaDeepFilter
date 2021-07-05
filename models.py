@@ -159,8 +159,8 @@ class VanillaCNNModel(tf.keras.models.Model):
                  dropout: float = 0.4,
                  *args,
                  **kwargs):
-        _ = kwargs.pop("fine_tune_at")
-        _ = kwargs.pop("train_from_scratch")
+        _ = kwargs.pop("fine_tune_at", None)
+        _ = kwargs.pop("train_from_scratch",None)
 
         super().__init__(*args, **kwargs)
 
@@ -173,7 +173,7 @@ class VanillaCNNModel(tf.keras.models.Model):
         MaxPool2D = partial(tf.keras.layers.MaxPool2D, pool_size=(2, 2))
 
         self.model = tf.keras.models.Sequential([
-            tf.keras.layers.Input(shape=[None, *img_shape]),
+            tf.keras.layers.Input(shape=img_shape),
             Conv2D(filters=32),
             MaxPool2D(),
             Dropout(),
