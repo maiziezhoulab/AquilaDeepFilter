@@ -26,31 +26,29 @@ MODEL_ARCH = {
 }
 
 
-def train_model(model_arch, epoch, batch_size, lr, path_to_train_dir,
-                path_to_eval_dir, train_from_scratch, fine_tune_at,
-                checkpoint_dir, tensorboard_log_dir) -> None:
+def train_model(args) -> None:
     """
     Helper function for train arg subparser to train the entire network
     """
     # define data loader for the validation and trainer set
-    train_dataset_loader = LoadData(path=path_to_train_dir)
-    val_dataset_loader = LoadData(path=path_to_eval_dir)
+    train_dataset_loader = LoadData(path=args.path_to_train_dir)
+    val_dataset_loader = LoadData(path=args.path_to_eval_dir)
 
     # retrieve and define the model for the interconnection
-    model = MODEL_ARCH.get(model_arch, XceptionNetModel)(
+    model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
         img_shape=(224, 224, 3),
         num_classes=len(train_dataset_loader.root_labels),
-        fine_tune_at=fine_tune_at,
-        train_from_scratch=train_from_scratch)
+        fine_tune_at=args.fine_tune_at,
+        train_from_scratch=args.train_from_scratch)
 
     # print the model arch name for the logs
-    print(f"{'='*30}{model_arch}{'='*30}")
+    print(f"{'='*30}{args.model_arch}{'='*30}")
 
     # init a model manager to start the training process
-    model_manager = ModelManager(name=model_arch)
+    model_manager = ModelManager(name=args.model_arch)
 
     # prepare the training dataset for ingesting it into the model
-    train_dataset = train_dataset_loader.create_dataset(batch_size=batch_size,
+    train_dataset = train_dataset_loader.create_dataset(batch_size=args.batch_size,
                                                         autotune=AUTOTUNE,
                                                         drop_remainder=True,
                                                         prefetch=True,
@@ -58,7 +56,7 @@ def train_model(model_arch, epoch, batch_size, lr, path_to_train_dir,
 
     # prepare validation dataset for the ingestion process
     validation_dataset = val_dataset_loader.create_dataset(
-        batch_size=batch_size,
+        batch_size=args.batch_size,
         autotune=AUTOTUNE,
         drop_remainder=True,
         prefetch=True,
@@ -68,40 +66,38 @@ def train_model(model_arch, epoch, batch_size, lr, path_to_train_dir,
     model_manager.train(
         model,
         loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-        learning_rate=lr,
+        learning_rate=args.lr,
         trainer_dataset=train_dataset,
         validation_dataset=validation_dataset,
-        check_point_dir=checkpoint_dir,
-        tensorboard_log=tensorboard_log_dir,
-        epochs=epoch)
+        check_point_dir=args.checkpoint_dir,
+        tensorboard_log=args.tensorboard_log_dir,
+        epochs=args.epoch)
 
 
-def predict_run(model_arch: str, batch_size: int, path_to_images: str,
-                output_file: str, checkpoint_dir: str,
-                num_classes: int) -> None:
+def predict_run(args) -> None:
     """Runner function for runing the prediction ops for generating prediction files for sv data"""
 
-    prediction_data_loader = PredictionDataLoader(path=path_to_images)
-    prediction_ds = prediction_data_loader.create_dataset(batch_size,
+    prediction_data_loader = PredictionDataLoader(path=args.path_to_images)
+    prediction_ds = prediction_data_loader.create_dataset(args.batch_size,
                                                           autotune=AUTOTUNE,
                                                           cache=True,
                                                           prefetch=True)
 
     # retrieve and define the model for the interconnection
-    model = MODEL_ARCH.get(model_arch,
+    model = MODEL_ARCH.get(args.model_arch,
                            XceptionNetModel)(img_shape=(224, 224, 3),
-                                             num_classes=num_classes)
+                                             num_classes=args.num_classes)
 
     # print the model arch name for the logs
-    print(f"{'='*30}{model_arch}{'='*30}")
+    print(f"{'='*30}{args.model_arch}{'='*30}")
 
     # init a model manager to start the training process
-    model_manager = ModelManager(name=model_arch)
+    model_manager = ModelManager(name=args.model_arch)
     model_manager.predict(
         model,
-        checkpoint_dir=checkpoint_dir,
+        checkpoint_dir=args.checkpoint_dir,
         prediction_dataset=prediction_ds,
-        output_file=output_file,
+        output_file=args.output_file,
         all_file_paths=prediction_data_loader.all_images_path)
 
 
