@@ -152,6 +152,9 @@ class VanillaCNNModel(tf.keras.models.Model):
     """
 
     def __init__(self, num_classes:int ,img_shape:Tuple[int],padding:str="same",strides:Tuple[int]=(2,2),dropout:float=0.4,*args, **kwargs):
+        _ = kwargs.pop("fine_tune_at")
+        _ = kwargs.pop("train_from_scratch")
+
         super().__init__(*args, **kwargs)
         
         Conv2D = partial(tf.keras.layers.Conv2D, strides=strides, padding=padding, activation=tf.nn.relu)
