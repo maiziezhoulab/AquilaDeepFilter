@@ -23,7 +23,7 @@ MODEL_ARCH = {
     "efficientnet": EfficientNetB0Model,
     "resnet": ResnetV2Model,
     "mobilenet": MobileNetModel,
-    "vanilla":VanillaCNNModel
+    "vanilla": VanillaCNNModel
 }
 
 
@@ -49,11 +49,12 @@ def train_model(args) -> None:
     model_manager = ModelManager(name=args.model_arch)
 
     # prepare the training dataset for ingesting it into the model
-    train_dataset = train_dataset_loader.create_dataset(batch_size=args.batch_size,
-                                                        autotune=AUTOTUNE,
-                                                        drop_remainder=True,
-                                                        prefetch=True,
-                                                        cache=True)
+    train_dataset = train_dataset_loader.create_dataset(
+        batch_size=args.batch_size,
+        autotune=AUTOTUNE,
+        drop_remainder=True,
+        prefetch=True,
+        cache=True)
 
     # prepare validation dataset for the ingestion process
     validation_dataset = val_dataset_loader.create_dataset(
@@ -118,7 +119,7 @@ if __name__ == "__main__":
     parser_train.add_argument("--model_arch",
                               choices=[
                                   "xception", "densenet", "efficientnet",
-                                  "vgg", "resnet", "mobilenet","vanilla"
+                                  "vgg", "resnet", "mobilenet", "vanilla"
                               ],
                               default="xception",
                               dest="model_arch")

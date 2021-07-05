@@ -146,20 +146,31 @@ class MobileNetModel(BaseNetModel):
         "preprocess_input": tf.keras.applications.mobilenet.preprocess_input
     }
 
+
 class VanillaCNNModel(tf.keras.models.Model):
     """
     Vanilla CNN model for testing out the simple keras model
     """
-
-    def __init__(self, num_classes:int ,img_shape:Tuple[int],padding:str="same",strides:Tuple[int]=(2,2),dropout:float=0.4,*args, **kwargs):
+    def __init__(self,
+                 num_classes: int,
+                 img_shape: Tuple[int],
+                 padding: str = "same",
+                 strides: Tuple[int] = (2, 2),
+                 dropout: float = 0.4,
+                 *args,
+                 **kwargs):
         _ = kwargs.pop("fine_tune_at")
         _ = kwargs.pop("train_from_scratch")
 
         super().__init__(*args, **kwargs)
-        
-        Conv2D = partial(tf.keras.layers.Conv2D, strides=strides, padding=padding, activation=tf.nn.relu)
+
+        Conv2D = partial(tf.keras.layers.Conv2D,
+                         strides=strides,
+                         padding=padding,
+                         activation=tf.nn.relu,
+                         kernel_size=(3, 3))
         Dropout = partial(tf.keras.layers.Dropout, rate=dropout)
-        MaxPool2D = partial(tf.keras.layers.MaxPool2D,pool_size=(2,2))
+        MaxPool2D = partial(tf.keras.layers.MaxPool2D, pool_size=(2, 2))
 
         self.model = tf.keras.models.Sequential([
             tf.keras.layers.Input(shape=[None, *img_shape]),
@@ -172,7 +183,7 @@ class VanillaCNNModel(tf.keras.models.Model):
             Conv2D(filters=64),
             MaxPool2D(),
             Dropout(),
-            Conv2D(filters=64,strides=(1,1)),
+            Conv2D(filters=64, strides=(1, 1)),
             MaxPool2D(),
             Dropout(),
             Dense(units=1024),
