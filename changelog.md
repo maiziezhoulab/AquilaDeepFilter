@@ -35,3 +35,6 @@
 - added: utils for writing data, creation of dirs and spiting string for result file
 - completed: prediction co-routine for generation of prediction results
 - added: parser for prediction part.
+
+### 2021-07-06
+- feat: added pipeline to move some data files randomly
