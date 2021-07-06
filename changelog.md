@@ -38,3 +38,4 @@
 
 ### 2021-07-06
 - feat: added pipeline to move some data files randomly
+- fixed: logger text for model training from scratch

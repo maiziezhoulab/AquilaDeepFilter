@@ -51,7 +51,7 @@ class BaseNetModel(tf.keras.models.Model):
             # freeze the base models to restrict further training
             self.base_model.trainable = False
             print("=" * 100)
-            print(f"Training Entire Model from Scratch")
+            print(f"Model Not loaded from Scratch")
             print("=" * 100)
 
         # check if fine tuning of model is required or not,
