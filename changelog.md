@@ -36,6 +36,15 @@
 - completed: prediction co-routine for generation of prediction results
 - added: parser for prediction part.
 
+### 2021-07-04
+- fixed: parser based issues for using both trainer and prediction mode from main runner
+- deleted: seperate prediction runner 
+- added: runner functions for train and predict ops
+
+### 2021-07-05
+- fixed: arg parser errors
+- fixed: the arg parser params error
+
 ### 2021-07-06
 - feat: added pipeline to move some data files randomly
 - fixed: logger text for model training from scratch
