@@ -143,3 +143,10 @@ class MobileNetModel(BaseNetModel):
         "model_layer": tf.keras.applications.MobileNetV2,
         "preprocess_input": tf.keras.applications.mobilenet.preprocess_input
     }
+
+
+class MobileNetV1Model(BaseNetModel):
+    model_config = {
+        "model_layer": tf.keras.applications.MobileNet,
+        "preprocess_input": tf.keras.applications.mobilenet.preprocess_input
+    }

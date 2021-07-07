@@ -39,3 +39,6 @@
 ### 2021-07-06
 - feat: added pipeline to move some data files randomly
 - fixed: logger text for model training from scratch
+
+### 2021-07-07
+- added: mobilenet v1 model

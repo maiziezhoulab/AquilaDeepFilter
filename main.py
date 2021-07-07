@@ -10,9 +10,14 @@ import tensorflow as tf
 
 from datapipeline.load_imageds import (  # model pipeline for loading image datasets
     LoadData, PredictionDataLoader)
-from models import EfficientNetB0Model  # models for training
-from models import (DenseNetModel, MobileNetModel, ResnetV2Model, VGG16Model,
-                    XceptionNetModel)
+from models import (
+    DenseNetModel,
+    EfficientNetB0Model,  # models for training
+    MobileNetModel,
+    MobileNetV1Model,
+    ResnetV2Model,
+    VGG16Model,
+    XceptionNetModel)
 from trainer import ModelManager  # model manager for handing all the ops
 
 MODEL_ARCH = {
@@ -21,7 +26,8 @@ MODEL_ARCH = {
     "vgg": VGG16Model,
     "efficientnet": EfficientNetB0Model,
     "resnet": ResnetV2Model,
-    "mobilenet": MobileNetModel
+    "mobilenet": MobileNetModel,
+    "mobilenetv1": MobileNetV1Model
 }
 
 if __name__ == "__main__":
@@ -40,7 +46,7 @@ if __name__ == "__main__":
     parser_train.add_argument("--model_arch",
                               choices=[
                                   "xception", "densenet", "efficientnet",
-                                  "vgg", "resnet", "mobilenet"
+                                  "vgg", "resnet", "mobilenet", "mobilenetv1"
                               ],
                               default="xception")
     parser_train.add_argument('--epoch',
