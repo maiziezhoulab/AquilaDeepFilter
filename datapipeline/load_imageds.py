@@ -19,7 +19,7 @@ class PreprocessMixin:
         # read image into a raw format
         raw_image = tf.io.read_file(image_path)
         # decode the image
-        decode_image = tf.image.decode_png(raw_image, channels=3)
+        decode_image = tf.image.decode_png(raw_image, channels=self.channel)
 
         # return the resized images
         return tf.image.resize(decode_image, self.image_shape)
@@ -31,11 +31,15 @@ class LoadData(PreprocessMixin):
     """
 
     # constructor for loading data path
-    def __init__(self, path, image_shape: Tuple[int] = (224, 224)):
+    def __init__(self,
+                 path,
+                 image_shape: Tuple[int] = (224, 224),
+                 channel: int = 3):
 
         # load root path
         self.path_to_dir = Path(path)
         self.image_shape = image_shape
+        self.channel = channel
         self.all_images_labels = self.load_labels()
 
     def load_labels(self):
@@ -110,11 +114,15 @@ class LoadData(PreprocessMixin):
 
 class PredictionDataLoader(PreprocessMixin):
     """ Data loader class for loading data as a prediction set """
-    def __init__(self, path, image_shape: Tuple[int] = (224, 224)) -> None:
+    def __init__(self,
+                 path,
+                 image_shape: Tuple[int] = (224, 224),
+                 channel: int = 3) -> None:
 
         # load root path
         self.path_to_dir = Path(path)
         self.image_shape = image_shape
+        self.channel = channel
         self.all_images_path = [
             str(path) for path in self.path_to_dir.glob("*.png")
         ]

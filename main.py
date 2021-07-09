@@ -37,12 +37,16 @@ def train_model(args) -> None:
     Helper function for train arg subparser to train the entire network
     """
     # define data loader for the validation and trainer set
-    train_dataset_loader = LoadData(path=args.path_to_train_dir)
-    val_dataset_loader = LoadData(path=args.path_to_eval_dir)
+    train_dataset_loader = LoadData(path=args.path_to_train_dir,
+                                    image_shape=(args.height, args.width),
+                                    channel=args.channel)
+    val_dataset_loader = LoadData(path=args.path_to_eval_dir,
+                                  image_shape=(args.height, args.width),
+                                  channel=args.channel)
 
     # retrieve and define the model for the interconnection
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
-        img_shape=(224, 224, 3),
+        img_shape=(args.height, args.width, args.channel),
         num_classes=len(train_dataset_loader.root_labels),
         fine_tune_at=args.fine_tune_at,
         train_from_scratch=args.train_from_scratch)
@@ -54,11 +58,12 @@ def train_model(args) -> None:
     model_manager = ModelManager(name=args.model_arch)
 
     # prepare the training dataset for ingesting it into the model
-    train_dataset = train_dataset_loader.create_dataset(batch_size=args.batch_size,
-                                                        autotune=AUTOTUNE,
-                                                        drop_remainder=True,
-                                                        prefetch=True,
-                                                        cache=True)
+    train_dataset = train_dataset_loader.create_dataset(
+        batch_size=args.batch_size,
+        autotune=AUTOTUNE,
+        drop_remainder=True,
+        prefetch=True,
+        cache=True)
 
     # prepare validation dataset for the ingestion process
     validation_dataset = val_dataset_loader.create_dataset(
@@ -83,16 +88,19 @@ def train_model(args) -> None:
 def predict_run(args) -> None:
     """Runner function for runing the prediction ops for generating prediction files for sv data"""
 
-    prediction_data_loader = PredictionDataLoader(path=args.path_to_images)
+    prediction_data_loader = PredictionDataLoader(path=args.path_to_images,
+                                                  image_shape=(args.height,
+                                                               args.width),
+                                                  channel=args.channel)
     prediction_ds = prediction_data_loader.create_dataset(args.batch_size,
                                                           autotune=AUTOTUNE,
                                                           cache=True,
                                                           prefetch=True)
 
     # retrieve and define the model for the interconnection
-    model = MODEL_ARCH.get(args.model_arch,
-                           XceptionNetModel)(img_shape=(224, 224, 3),
-                                             num_classes=args.num_classes)
+    model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
+        img_shape=(args.height, args.width, args.channel),
+        num_classes=args.num_classes)
 
     # print the model arch name for the logs
     print(f"{'='*30}{args.model_arch}{'='*30}")
@@ -172,6 +180,25 @@ if __name__ == "__main__":
                               help='tensorboard summary',
                               dest="tensorboard_log_dir")
 
+    parser_train.add_argument(
+        "--height",
+        default=224,
+        type=int,
+        help="height of input images, default value is 224",
+        dest="height")
+    parser_train.add_argument(
+        "--width",
+        default=224,
+        type=int,
+        help="width of input images, default value is 224",
+        dest="width")
+    parser_train.add_argument(
+        "--channel",
+        default=3,
+        type=int,
+        help="channel of input images, default value is 3",
+        dest="channel")
+
     parser_train.set_defaults(func=train_model)
 
     # arguments for predict section
@@ -203,6 +230,25 @@ if __name__ == "__main__":
         help='number of classes to pick prediction from',
         default=2,
         type=int)
+
+    parser_predict.add_argument(
+        "--height",
+        default=224,
+        type=int,
+        help="height of input images, default value is 224",
+        dest="height")
+    parser_predict.add_argument(
+        "--width",
+        default=224,
+        type=int,
+        help="width of input images, default value is 224",
+        dest="width")
+    parser_predict.add_argument(
+        "--channel",
+        default=3,
+        type=int,
+        help="channel of input images, default value is 3",
+        dest="channel")
 
     parser_predict.set_defaults(func=predict_run)
 

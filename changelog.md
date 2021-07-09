@@ -51,3 +51,6 @@
 
 ### 2021-07-07
 - added: mobilenet v1 model
+
+### 2021-07-08
+- feat: added params for changing the height width and channel

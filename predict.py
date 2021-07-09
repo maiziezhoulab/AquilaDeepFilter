@@ -34,8 +34,6 @@ if __name__ == "__main__":
 
     # parser_train = subparsers.add_parser('train',
     #                                      help='train the classification model')
-    
 
     # parse the args from arg parsers
     # args = parser_predict.parse_args()
-    
