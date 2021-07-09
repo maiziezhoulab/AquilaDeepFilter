@@ -29,7 +29,7 @@ class ModelManager(tf.Module):
               epochs: int = 0):
 
         if os.path.exists(check_point_dir):
-            model.load_weights(check_point_dir).expect_partial()
+            model.load_weights(check_point_dir)
             print(f"Loaded Weights from {check_point_dir} Sucessfully")
         model.compile(optimizer=optimizer(learning_rate=learning_rate),
                       loss=loss,
@@ -40,7 +40,7 @@ class ModelManager(tf.Module):
             histogram_freq=1 if validation_dataset else 0)
 
         _model_check_points = tf.keras.callbacks.ModelCheckpoint(
-            filepath=check_point_dir, save_best_only=True)
+            filepath=check_point_dir, save_best_only=True, save_weights_only=True)
         if validation_dataset:
             model.fit(trainer_dataset,
                       validation_data=validation_dataset,
@@ -60,7 +60,7 @@ class ModelManager(tf.Module):
 
         # load model checkpoints
         if os.path.exists(checkpoint_dir):
-            model.load_weights(checkpoint_dir).expect_partial()
+            model.load_weights(checkpoint_dir)
             print(f"Loaded Weights from {checkpoint_dir} Sucessfully")
 
         model.compile(optimizer=tf.keras.optimizers.Adam(),

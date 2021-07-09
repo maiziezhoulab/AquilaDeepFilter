@@ -54,3 +54,7 @@
 
 ### 2021-07-08
 - feat: added params for changing the height width and channel
+
+### 2021-07-10
+- fixed: warning and weights saving in model checkpoints
+- updated: instead of saving entire models we are not just saving weights
