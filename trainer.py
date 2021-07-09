@@ -29,7 +29,7 @@ class ModelManager(tf.Module):
               epochs: int = 0):
 
         if os.path.exists(check_point_dir):
-            model.load_weights(check_point_dir)
+            model.load_weights(check_point_dir).expect_partial()
             print(f"Loaded Weights from {check_point_dir} Sucessfully")
         model.compile(optimizer=optimizer(learning_rate=learning_rate),
                       loss=loss,
@@ -58,17 +58,15 @@ class ModelManager(tf.Module):
                 output_file: str,
                 all_file_paths=List[str]) -> None:
 
-        # first compile the model
+        # load model checkpoints
+        if os.path.exists(checkpoint_dir):
+            model.load_weights(checkpoint_dir).expect_partial()
+            print(f"Loaded Weights from {checkpoint_dir} Sucessfully")
+
         model.compile(optimizer=tf.keras.optimizers.Adam(),
                       loss=tf.keras.losses.SparseCategoricalCrossentropy(
                           from_logits=True),
                       metrics=['accuracy'])
-
-        # load model checkpoints
-        if os.path.exists(checkpoint_dir):
-            model.load_weights(checkpoint_dir)
-            print(f"Loaded Weights from {checkpoint_dir} Sucessfully")
-
 
         _output = tf.nn.softmax(model.predict(prediction_dataset), axis=1)
 
