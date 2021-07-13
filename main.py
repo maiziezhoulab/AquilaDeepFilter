@@ -204,9 +204,9 @@ if __name__ == "__main__":
     # arguments for predict section
     parser_predict.add_argument("--model_arch",
                                 choices=[
-                                    "xception", "densenet", "efficientnet",
-                                    "vgg", "resnet", "mobilenet"
-                                ],
+                                  "xception", "densenet", "efficientnet",
+                                  "vgg", "resnet", "mobilenet", "mobilenetv1"
+                              ],
                                 default="xception")
     parser_predict.add_argument('--batch_size',
                                 type=int,
