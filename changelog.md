@@ -58,3 +58,6 @@
 ### 2021-07-10
 - fixed: warning and weights saving in model checkpoints
 - updated: instead of saving entire models we are not just saving weights
+
+### 2021-07-30
+- feat: added custom preprocessing units for the 400x200 images.
