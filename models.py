@@ -49,9 +49,9 @@ class BaseNetModel(tf.keras.models.Model):
         self.custom_input_processing = custom_input_preprocessing
         _img_shape = (224,224,img_shape[-1]) if self.custom_input_processing else img_shape
 
+        self.preprocess_input = self.model_config.get('preprocess_input')
         if custom_input_preprocessing:
             self.preprocess_input = tf.keras.layers.Conv2D(filters=3, kernel_size=(2,3), strides=(1,2), input_shape=img_shape)
-        self.preprocess_input = self.model_config.get('preprocess_input')
 
         # define base model for the training purpose
         self.base_model = self.model_config.get('model_layer')(
