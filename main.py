@@ -40,9 +40,6 @@ def train_model(args) -> None:
     train_dataset_loader = LoadData(path=args.path_to_train_dir,
                                     image_shape=(args.height, args.width),
                                     channel=args.channel)
-    val_dataset_loader = LoadData(path=args.path_to_eval_dir,
-                                  image_shape=(args.height, args.width),
-                                  channel=args.channel)
     
 
     # retrieve and define the model for the interconnection
@@ -65,14 +62,19 @@ def train_model(args) -> None:
         drop_remainder=True,
         prefetch=True,
         cache=True)
+    
+    if args.path_to_eval_dir:
+        val_dataset_loader = LoadData(path=args.path_to_eval_dir,
+                                    image_shape=(args.height, args.width),
+                                    channel=args.channel)
 
-    # prepare validation dataset for the ingestion process
-    validation_dataset = val_dataset_loader.create_dataset(
-        batch_size=args.batch_size,
-        autotune=AUTOTUNE,
-        drop_remainder=True,
-        prefetch=True,
-        cache=True)
+        # prepare validation dataset for the ingestion process
+        validation_dataset = val_dataset_loader.create_dataset(
+            batch_size=args.batch_size,
+            autotune=AUTOTUNE,
+            drop_remainder=True,
+            prefetch=True,
+            cache=True)
 
     # call train function for the training ops
     model_manager.train(
@@ -158,7 +160,7 @@ if __name__ == "__main__":
     parser_train.add_argument('--path_to_eval_dir',
                               required=True,
                               help='path to evaluation dataset directory',
-                              dest="path_to_eval_dir")
+                              dest="path_to_eval_dir", default=None)
     parser_train.add_argument('--train_from_scratch',
                               type=bool,
                               default=False,

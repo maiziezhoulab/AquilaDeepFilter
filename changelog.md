@@ -61,3 +61,6 @@
 
 ### 2021-07-30
 - feat: added custom preprocessing units for the 400x200 images.
+
+### 2021-08-13
+- updated: added option for validation dataset
