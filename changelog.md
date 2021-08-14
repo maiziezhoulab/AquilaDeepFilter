@@ -64,3 +64,6 @@
 
 ### 2021-08-13
 - updated: added option for validation dataset
+
+### 2021-08-14
+- feat: added exponential decay in the learning rate

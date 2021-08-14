@@ -31,7 +31,11 @@ class ModelManager(tf.Module):
         if os.path.exists(check_point_dir):
             model.load_weights(check_point_dir).expect_partial()
             print(f"Loaded Weights from {check_point_dir} Sucessfully")
-        model.compile(optimizer=optimizer(learning_rate=learning_rate),
+
+        lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+            learning_rate, decay_steps=10000, decay_rate=0.9)
+
+        model.compile(optimizer=optimizer(learning_rate=lr_schedule),
                       loss=loss,
                       metrics=['accuracy'])
 

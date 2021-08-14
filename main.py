@@ -40,14 +40,14 @@ def train_model(args) -> None:
     train_dataset_loader = LoadData(path=args.path_to_train_dir,
                                     image_shape=(args.height, args.width),
                                     channel=args.channel)
-    
 
     # retrieve and define the model for the interconnection
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
         img_shape=(args.height, args.width, args.channel),
         num_classes=len(train_dataset_loader.root_labels),
         fine_tune_at=args.fine_tune_at,
-        train_from_scratch=args.train_from_scratch, custom_input_preprocessing=args.custom_input_preprocessing)
+        train_from_scratch=args.train_from_scratch,
+        custom_input_preprocessing=args.custom_input_preprocessing)
 
     # print the model arch name for the logs
     print(f"{'='*30}{args.model_arch}{'='*30}")
@@ -62,11 +62,11 @@ def train_model(args) -> None:
         drop_remainder=True,
         prefetch=True,
         cache=True)
-    
+
     if args.path_to_eval_dir:
         val_dataset_loader = LoadData(path=args.path_to_eval_dir,
-                                    image_shape=(args.height, args.width),
-                                    channel=args.channel)
+                                      image_shape=(args.height, args.width),
+                                      channel=args.channel)
 
         # prepare validation dataset for the ingestion process
         validation_dataset = val_dataset_loader.create_dataset(
@@ -103,7 +103,8 @@ def predict_run(args) -> None:
     # retrieve and define the model for the interconnection
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
         img_shape=(args.height, args.width, args.channel),
-        num_classes=args.num_classes, custom_input_preprocessing=args.custom_input_preprocessing)
+        num_classes=args.num_classes,
+        custom_input_preprocessing=args.custom_input_preprocessing)
 
     # print the model arch name for the logs
     print(f"{'='*30}{args.model_arch}{'='*30}")
@@ -150,7 +151,7 @@ if __name__ == "__main__":
                               dest="batch_size")
     parser_train.add_argument('--lr',
                               type=float,
-                              default=0.001,
+                              default=1e-2,
                               help='initial learning rate for adam',
                               dest="lr")
     parser_train.add_argument('--path_to_train_dir',
@@ -160,7 +161,8 @@ if __name__ == "__main__":
     parser_train.add_argument('--path_to_eval_dir',
                               required=True,
                               help='path to evaluation dataset directory',
-                              dest="path_to_eval_dir", default=None)
+                              dest="path_to_eval_dir",
+                              default=None)
     parser_train.add_argument('--train_from_scratch',
                               type=bool,
                               default=False,
@@ -212,9 +214,9 @@ if __name__ == "__main__":
     # arguments for predict section
     parser_predict.add_argument("--model_arch",
                                 choices=[
-                                  "xception", "densenet", "efficientnet",
-                                  "vgg", "resnet", "mobilenet", "mobilenetv1"
-                              ],
+                                    "xception", "densenet", "efficientnet",
+                                    "vgg", "resnet", "mobilenet", "mobilenetv1"
+                                ],
                                 default="xception")
     parser_predict.add_argument('--batch_size',
                                 type=int,
@@ -257,12 +259,12 @@ if __name__ == "__main__":
         type=int,
         help="channel of input images, default value is 3",
         dest="channel")
-    
+
     parser_predict.add_argument('--custom_input_preprocessing',
-                              type=bool,
-                              default=False,
-                              help='to use custom input processing units',
-                              dest="custom_input_preprocessing")
+                                type=bool,
+                                default=False,
+                                help='to use custom input processing units',
+                                dest="custom_input_preprocessing")
 
     parser_predict.set_defaults(func=predict_run)
 

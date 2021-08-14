@@ -22,7 +22,7 @@ class BaseNetModel(tf.keras.models.Model):
                  num_classes: int,
                  fine_tune_at: int = 0,
                  train_from_scratch: bool = False,
-                 custom_input_preprocessing:bool = False,
+                 custom_input_preprocessing: bool = False,
                  *args,
                  **kwargs):
         super().__init__(*args, **kwargs)
@@ -47,11 +47,17 @@ class BaseNetModel(tf.keras.models.Model):
         # self.preprocess = tf.keras.models.Sequential(_pre_model_arch)
 
         self.custom_input_processing = custom_input_preprocessing
-        _img_shape = (224,224,img_shape[-1]) if self.custom_input_processing else img_shape
+        _img_shape = (
+            224, 224,
+            img_shape[-1]) if self.custom_input_processing else img_shape
 
         self.preprocess_input = self.model_config.get('preprocess_input')
         if custom_input_preprocessing:
-            self.preprocess_input = tf.keras.layers.Conv2D(filters=3, kernel_size=(2,3), strides=(1,2), input_shape=img_shape)
+            self.preprocess_input = tf.keras.layers.Conv2D(
+                filters=3,
+                kernel_size=(2, 3),
+                strides=(1, 2),
+                input_shape=img_shape)
 
         # define base model for the training purpose
         self.base_model = self.model_config.get('model_layer')(
@@ -79,7 +85,6 @@ class BaseNetModel(tf.keras.models.Model):
             tf.keras.layers.Dropout(kwargs.get('dropout', 0.2)),
             tf.keras.layers.Dense(num_classes)
         ])
-        
 
     def _check_config_hyperparams(self,
                                   param_name: str,
@@ -102,7 +107,7 @@ class BaseNetModel(tf.keras.models.Model):
         x = self.preprocess_input(inputs)
 
         if self.custom_input_processing:
-            x = tf.image.resize(x, size=(224,224))
+            x = tf.image.resize(x, size=(224, 224))
 
         # preprocessing layer called for data augmentation part
         # x = self.preprocess(x, training=training)
