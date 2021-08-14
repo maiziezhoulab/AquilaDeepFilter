@@ -46,7 +46,7 @@ def train_model(args) -> None:
     # retrieve and define the model for the interconnection
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
         img_shape=(args.height, args.width, args.channel),
-        num_classes=len(train_dataset_loader.root_labels),
+        num_classes=len(train_dataset_loader[0].root_labels),
         fine_tune_at=args.fine_tune_at,
         train_from_scratch=args.train_from_scratch,
         custom_input_preprocessing=args.custom_input_preprocessing)
@@ -61,35 +61,27 @@ def train_model(args) -> None:
     train_dataset = train_dataset_loader[0].create_dataset(
         batch_size=args.batch_size,
         autotune=AUTOTUNE,
-        drop_remainder=True,
-        prefetch=True,
-        cache=True)
+        drop_remainder=True)
 
     # prepare validation dataset for the ingestion process
     validation_dataset = val_dataset_loader[0].create_dataset(
         batch_size=args.batch_size,
         autotune=AUTOTUNE,
-        drop_remainder=True,
-        prefetch=True,
-        cache=True)
+        drop_remainder=True)
 
-    if len(train_dataset_loader > 1):
+    if len(train_dataset_loader) > 1:
         for i in train_dataset_loader[1:]:
             train_dataset.concatenate(
                 i.create_dataset(batch_size=args.batch_size,
                                  autotune=AUTOTUNE,
-                                 drop_remainder=True,
-                                 prefetch=True,
-                                 cache=True))
+                                 drop_remainder=True))
 
-    if len(val_dataset_loader > 1):
+    if len(val_dataset_loader) > 1:
         for i in val_dataset_loader[1:]:
             validation_dataset.concatenate(
                 i.create_dataset(batch_size=args.batch_size,
                                  autotune=AUTOTUNE,
-                                 drop_remainder=True,
-                                 prefetch=True,
-                                 cache=True))
+                                 drop_remainder=True))
 
     # call train function for the training ops
     model_manager.train(
