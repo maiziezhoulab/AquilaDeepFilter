@@ -4,21 +4,15 @@ author:Sanidhya Mangal
 github:sanidhyamangal
 """
 
-import argparse
-from os import path  # for argument parsing
+import argparse  # for argument parsing
 
 import tensorflow as tf
 
 from datapipeline.load_imageds import (  # model pipeline for loading image datasets
     LoadData, PredictionDataLoader)
-from models import (
-    DenseNetModel,
-    EfficientNetB0Model,  # models for training
-    MobileNetModel,
-    MobileNetV1Model,
-    ResnetV2Model,
-    VGG16Model,
-    XceptionNetModel)
+from models import EfficientNetB0Model  # models for training
+from models import (DenseNetModel, MobileNetModel, MobileNetV1Model,
+                    ResnetV2Model, VGG16Model, XceptionNetModel)
 from trainer import ModelManager  # model manager for handing all the ops
 
 MODEL_ARCH = {
@@ -37,9 +31,17 @@ def train_model(args) -> None:
     Helper function for train arg subparser to train the entire network
     """
     # define data loader for the validation and trainer set
-    train_dataset_loader = LoadData(path=args.path_to_train_dir,
-                                    image_shape=(args.height, args.width),
-                                    channel=args.channel)
+    train_dataset_loader = [
+        LoadData(path=_path,
+                 image_shape=(args.height, args.width),
+                 channel=args.channel) for _path in args.path_to_train_dir
+    ]
+
+    val_dataset_loader = [
+        LoadData(path=_path,
+                 image_shape=(args.height, args.width),
+                 channel=args.channel) for _path in args.path_to_eval_dir
+    ]
 
     # retrieve and define the model for the interconnection
     model = MODEL_ARCH.get(args.model_arch, XceptionNetModel)(
@@ -56,25 +58,38 @@ def train_model(args) -> None:
     model_manager = ModelManager(name=args.model_arch)
 
     # prepare the training dataset for ingesting it into the model
-    train_dataset = train_dataset_loader.create_dataset(
+    train_dataset = train_dataset_loader[0].create_dataset(
         batch_size=args.batch_size,
         autotune=AUTOTUNE,
         drop_remainder=True,
         prefetch=True,
         cache=True)
 
-    if args.path_to_eval_dir:
-        val_dataset_loader = LoadData(path=args.path_to_eval_dir,
-                                      image_shape=(args.height, args.width),
-                                      channel=args.channel)
+    # prepare validation dataset for the ingestion process
+    validation_dataset = val_dataset_loader[0].create_dataset(
+        batch_size=args.batch_size,
+        autotune=AUTOTUNE,
+        drop_remainder=True,
+        prefetch=True,
+        cache=True)
 
-        # prepare validation dataset for the ingestion process
-        validation_dataset = val_dataset_loader.create_dataset(
-            batch_size=args.batch_size,
-            autotune=AUTOTUNE,
-            drop_remainder=True,
-            prefetch=True,
-            cache=True)
+    if len(train_dataset_loader > 1):
+        for i in train_dataset_loader[1:]:
+            train_dataset.concatenate(
+                i.create_dataset(batch_size=args.batch_size,
+                                 autotune=AUTOTUNE,
+                                 drop_remainder=True,
+                                 prefetch=True,
+                                 cache=True))
+
+    if len(val_dataset_loader > 1):
+        for i in val_dataset_loader[1:]:
+            validation_dataset.concatenate(
+                i.create_dataset(batch_size=args.batch_size,
+                                 autotune=AUTOTUNE,
+                                 drop_remainder=True,
+                                 prefetch=True,
+                                 cache=True))
 
     # call train function for the training ops
     model_manager.train(
@@ -157,12 +172,13 @@ if __name__ == "__main__":
     parser_train.add_argument('--path_to_train_dir',
                               required=True,
                               help='path to training dataset directory',
-                              dest="path_to_train_dir")
+                              dest="path_to_train_dir",
+                              action="append")
     parser_train.add_argument('--path_to_eval_dir',
                               required=True,
                               help='path to evaluation dataset directory',
                               dest="path_to_eval_dir",
-                              default=None)
+                              action="append")
     parser_train.add_argument('--train_from_scratch',
                               type=bool,
                               default=False,
