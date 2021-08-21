@@ -68,3 +68,6 @@
 ### 2021-08-14
 - feat: added exponential decay in the learning rate
 - feat: added multiple training path and evaluation path for training
+
+### 2021-08-21
+- feat added reduce on lr and early stopping callbacks for the training part

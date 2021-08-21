@@ -45,6 +45,12 @@ class ModelManager(tf.Module):
 
         _model_check_points = tf.keras.callbacks.ModelCheckpoint(
             filepath=check_point_dir, save_best_only=True)
+
+        _early_stopping = tf.keras.callbacks.EarlyStopping(monitor='loss',
+                                                           patience=5)
+        _reduce_lr_on_plateue = tf.keras.callbacks.ReduceLROnPlateau(
+            monitor="loss", patience=5)
+
         if validation_dataset:
             model.fit(trainer_dataset,
                       validation_data=validation_dataset,
@@ -53,7 +59,10 @@ class ModelManager(tf.Module):
         else:
             model.fit(trainer_dataset,
                       epochs=epochs,
-                      callbacks=[_tb_callback, _model_check_points])
+                      callbacks=[
+                          _tb_callback, _model_check_points, _early_stopping,
+                          _reduce_lr_on_plateue
+                      ])
 
     def predict(self,
                 model: tf.keras.models.Model,

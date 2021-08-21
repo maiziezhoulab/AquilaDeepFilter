@@ -61,27 +61,31 @@ def train_model(args) -> None:
     train_dataset = train_dataset_loader[0].create_dataset(
         batch_size=args.batch_size,
         autotune=AUTOTUNE,
-        drop_remainder=True, prefetch=True)
+        drop_remainder=True,
+        prefetch=True)
 
     # prepare validation dataset for the ingestion process
     validation_dataset = val_dataset_loader[0].create_dataset(
         batch_size=args.batch_size,
         autotune=AUTOTUNE,
-        drop_remainder=True,prefetch=True)
+        drop_remainder=True,
+        prefetch=True)
 
     if len(train_dataset_loader) > 1:
         for i in train_dataset_loader[1:]:
             train_dataset.concatenate(
                 i.create_dataset(batch_size=args.batch_size,
                                  autotune=AUTOTUNE,
-                                 drop_remainder=True,prefetch=True))
+                                 drop_remainder=True,
+                                 prefetch=True))
 
     if len(val_dataset_loader) > 1:
         for i in val_dataset_loader[1:]:
             validation_dataset.concatenate(
                 i.create_dataset(batch_size=args.batch_size,
                                  autotune=AUTOTUNE,
-                                 drop_remainder=True,prefetch=True))
+                                 drop_remainder=True,
+                                 prefetch=True))
 
     # call train function for the training ops
     model_manager.train(
