@@ -71,3 +71,7 @@
 
 ### 2021-08-21
 - feat added reduce on lr and early stopping callbacks for the training part
+
+### 2021-08-24
+- removed: the lr schedule part
+- updated: the name of mobilenet to mobilenetv2

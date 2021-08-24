@@ -21,7 +21,7 @@ MODEL_ARCH = {
     "vgg": VGG16Model,
     "efficientnet": EfficientNetB0Model,
     "resnet": ResnetV2Model,
-    "mobilenet": MobileNetModel,
+    "mobilenetv2": MobileNetModel,
     "mobilenetv1": MobileNetV1Model
 }
 
@@ -146,7 +146,7 @@ if __name__ == "__main__":
     parser_train.add_argument("--model_arch",
                               choices=[
                                   "xception", "densenet", "efficientnet",
-                                  "vgg", "resnet", "mobilenet", "mobilenetv1"
+                                  "vgg", "resnet", "mobilenetv2", "mobilenetv1"
                               ],
                               default="xception",
                               dest="model_arch")
@@ -162,7 +162,7 @@ if __name__ == "__main__":
                               dest="batch_size")
     parser_train.add_argument('--lr',
                               type=float,
-                              default=1e-2,
+                              default=2e-2,
                               help='initial learning rate for adam',
                               dest="lr")
     parser_train.add_argument('--path_to_train_dir',
@@ -227,7 +227,7 @@ if __name__ == "__main__":
     parser_predict.add_argument("--model_arch",
                                 choices=[
                                     "xception", "densenet", "efficientnet",
-                                    "vgg", "resnet", "mobilenet", "mobilenetv1"
+                                    "vgg", "resnet", "mobilenetv2", "mobilenetv1"
                                 ],
                                 default="xception")
     parser_predict.add_argument('--batch_size',
