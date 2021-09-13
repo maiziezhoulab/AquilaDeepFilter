@@ -6,15 +6,24 @@
 ## Installation
 ### Dependencies
 tensorflow==2.5.0
+
 tensorboard==2.5.0
+
 matplotlib==3.1.0
+
 numpy==1.19.5
+
 opencv-python==3.1.0.4
+
 Pillow==7.2.0
+
 pysam==0.15.4
+
 scikit-learn==0.19.2
+
 scipy==1.5.4
-### Install from github (requires Python 3.6.* or newer)
+
+### Install from github
 1. git clone --recursive https://github.com/maiziezhoulab/AquilaDeepFilter.git
 2. pip install requirements.txt
 
