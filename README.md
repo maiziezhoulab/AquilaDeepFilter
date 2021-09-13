@@ -72,19 +72,15 @@ usage: DeepSVFilter [OPTIONS]
 
 		--
 
-## Output
+## Repo Structure and Output
 
-1. The 'preprocess' command will take a SV bed file and output a SV image directory which contains  
+1. The   
 
-1) image dir: storing all SV images  
+2. The 
 
-2) SV image path file: storing the paths of all SV images  
+3. The 'train' command will take   
 
-2. The 'augmentate' command will take a SV image path file and also output a SV image directory after data augmentation.  
-
-3. The 'train' command will take four SV image path files and output the trained model in the checkpoint directory.  
-
-4. The 'predict' command will take the SV image path file got by the 'preprocess' command and output the filtering result  as follows.
+4. The 'predict' command will take t
 
 Citation
 --------
