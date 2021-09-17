@@ -21,7 +21,7 @@ from pathlib import Path
 #                               type=int,
 #                               default=0,
 #                               help='truvari param max')
-args = parser.parse_args()
+# args = parser.parse_args()
 
 ##########################
 # insertions & deletions #
@@ -79,6 +79,7 @@ if __name__ == '__main__':
                                   required=True,
                                   # default='/data/maiziezhou_lab/Datasets/Benchmark0.6_chr/by_type/HG002_SVs_Tier1_v0.6_chr_del_removechrY.vcf.gz',
                                   help='DEL, INS')
+    args = parser.parse_args()
     lines = []
     root_out_dir = args.path_to_output_folder
     vcf_file_gz = args.path_to_vcf

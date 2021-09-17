@@ -278,7 +278,7 @@ if __name__ == '__main__':
     #subparsers = parser.add_subparsers(help='preprocess, augmentate, train or predict')
     
     #parser_preprocess = subparsers.add_parser('preprocess', help='generate SV images')
-    parser.add_argument('--vcf_dir', dest='vcf_dir', required=True, help='folder for vcf input')
+    parser.add_argument('--vcf_dir', dest='vcf_dir', required=True, help='path of folder for vcf input')
     parser.add_argument('--output_folder',
                               required=True,
                               help='path to output folder')

@@ -33,9 +33,21 @@ usage: DeepSVFilter [OPTIONS]
 **1. file format conversion**
       This script is used to extract SV signals for image generation.
 
-	python ./preprocess/vcf2bed/.py 
+	python ./preprocess/vcf2bed/vcf2bed_training.py 
 
-		-- 
+		--vcf_dir [path of folder for GT vcf input]
+        
+        --output_folder [path to output folder]
+
+        --SV_type [DEL or INS]
+
+    python ./preprocess/vcf2bed/vcf2bed_val.py 
+
+		--path_to_vcf [path to raw vcf file for validation]
+
+        --path_to_output_folder [path to output folder]
+
+        --SV_type [DEL or INS]
 
 **2. image generation and augmentate**
       This script is used for data augmentation.
