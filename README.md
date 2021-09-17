@@ -69,28 +69,28 @@ usage: DeepSVFilter [OPTIONS]
 **3. train**
       This script is used to train a set of convolutional neural networks.  
 
-	python ./CNN/train.py
+	python ./AquilaDeepFilter/train.py
 
 		--		
 
 **4. predict**
       This script is used to make predictions for candidate SVs.  
 
-	python ./CNN/predict.py
+	python ./AquilaDeepFilter/predict.py
 
 		--
 
 **5. evaluate**
 	This script performs Truvari evaluation on the training models.  
 
-	python ./post/truvari_eval.py
+	python ./post/truvari/truvari_evaluation.py
 
 		--
 
 **6. ensemble**
 	This script is used to acquire majortiy voting results of all models.  
 
-	python ./post/ensemble_.py 
+	python ./post/ensemble/ensemble_.py 
 
 		--
 
