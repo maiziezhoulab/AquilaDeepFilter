@@ -84,7 +84,7 @@ if __name__ == '__main__':
     #parser_preprocess = subparsers.add_parser('preprocess', help='generate SV images')
     parser.add_argument('--output_imgs_dir', dest='output_imgs_dir', required=True,help='output image folder')
     parser.add_argument('--image_path_file', dest='image_path_file', required=True,help='input typical true or false image folder')
-    parser.add_argument('--patch_size', dest='patch_size', type=size, required=True, help='image patch size like 224,224')
+    parser.add_argument('--patch_size', dest='patch_size', type=size, required=True, help='width, height')
     # parser.add_argument('--sv_type', dest='sv_type', required=True, help='SV type')
     # parser.add_argument('--bam_path', dest='bam_path', required=True, help='BAM file')
     # parser.add_argument('--bed_path', dest='bed_path', required=True, help='SV BED file')
