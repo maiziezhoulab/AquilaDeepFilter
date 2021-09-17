@@ -60,6 +60,12 @@ scipy==1.5.4
             --path_to_output_folder [path to output folder]
             --SV_type [DEL or INS]
 
+    python ./preprocess/vcf2bed/bed2vcf.py 
+
+		--path_to_vcf [path to raw vcf file for validation]
+            --path_to_output_folder [path to output folder]
+            --SV_type [DEL or INS]
+
 **2. image generation and augmentate**
       This script is used for data augmentation.
 
@@ -78,18 +84,35 @@ scipy==1.5.4
             --patch_size [wdith, height]
 
 **3. train**
-      This script is used to train a set of convolutional neural networks.  
+      This script is used to train AquilaDeepFilter.  
 
-	python ./AquilaDeepFilter/train.py
+	python ./AquilaDeepFilter/main.py train
 
-		--		
+		--model_arch [xception,densenet,efficientnet,vgg,resnet,mobilenet]
+            --batch_size BATCH_SIZE [number of samples in one batch]
+            --path_to_images [path to prediction images directory]
+            --output_file [path where output file needs to be saved]
+            --checkpoint_dir [path to directory from which checkpoints needs to be loaded]
+            --num_classes [number of classes to pick prediction from]
+            --height HEIGHT [height of input images]
+            --width WIDTH [width of input images, default value is 224]
+            --channel CHANNEL [channel of input images, default value is 3]
 
+  
 **4. predict**
       This script is used to make predictions for candidate SVs.  
 
-	python ./AquilaDeepFilter/predict.py
+	python ./AquilaDeepFilter/main.py predict
 
-		--
+		--model_arch [xception,densenet,efficientnet,vgg,resnet,mobilenet]
+            --batch_size BATCH_SIZE [number of samples in one batch]
+            --path_to_images [path to prediction images directory]
+            --output_file [path where output file needs to be saved]
+            --checkpoint_dir [path to directory from which checkpoints needs to be loaded]
+            --num_classes [number of classes to pick prediction from]
+            --height HEIGHT [height of input images]
+            --width WIDTH [width of input images, default value is 224]
+            --channel CHANNEL [channel of input images, default value is 3]
 
 **5. evaluate**
 	This script performs Truvari evaluation on the training models.  
