@@ -30,17 +30,21 @@ scipy==1.5.4
 ## Running
 usage: DeepSVFilter [OPTIONS]  
 
-**1. image generation**
+**1. file format conversion**
       This script is used to extract SV signals for image generation.
 
-	python ./preprocess/image_generate.py 
+	python ./preprocess/vcf2bed/.py 
 
 		-- 
 
-**2. augmentate**
+**2. image generation and augmentate**
       This script is used for data augmentation.
 
-	python ./preprocess/image_generate.py 
+	python ./preprocess/image_generation/bed2image.py 
+
+		--output_imgs_dir	
+    
+    python ./preprocess/image_generation/augmentate.py 
 
 		--output_imgs_dir	
 
