@@ -54,11 +54,17 @@ usage: DeepSVFilter [OPTIONS]
 
 	python ./preprocess/image_generation/bed2image.py 
 
-		--output_imgs_dir	
+		--sv_type [DEL or INS]
+        --bam_path [path to .BAM file]
+        --bed_path [path to .BED file generated in step 1]
+        --output_imgs_dir [path to output folder for images]
+        --patch_size [width, height]
     
     python ./preprocess/image_generation/augmentate.py 
 
-		--output_imgs_dir	
+		--output_imgs_dir [path to output folder for augmentated images]
+        --image_path_file [path to file that includes all the images for augmentation]
+        --patch_size [wdith, height]
 
 **3. train**
       This script is used to train a set of convolutional neural networks.  
