@@ -44,7 +44,6 @@ scipy==1.5.4
 2. pip install requirements.txt
 
 ## Running
-usage: DeepSVFilter [OPTIONS]  
 
 **1. file format conversion**
       This script is used to extract SV signals for image generation.
