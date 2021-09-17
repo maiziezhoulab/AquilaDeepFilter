@@ -51,18 +51,14 @@ scipy==1.5.4
 	python ./preprocess/vcf2bed/vcf2bed_training.py 
 
 		--vcf_dir [path of folder for GT vcf input]
-        
-        --output_folder [path to output folder]
-
-        --SV_type [DEL or INS]
+            --output_folder [path to output folder]
+            --SV_type [DEL or INS]
 
     python ./preprocess/vcf2bed/vcf2bed_val.py 
 
 		--path_to_vcf [path to raw vcf file for validation]
-
-        --path_to_output_folder [path to output folder]
-
-        --SV_type [DEL or INS]
+            --path_to_output_folder [path to output folder]
+            --SV_type [DEL or INS]
 
 **2. image generation and augmentate**
       This script is used for data augmentation.
@@ -70,16 +66,16 @@ scipy==1.5.4
 	python ./preprocess/image_generation/bed2image.py 
 
 		--sv_type [DEL or INS]
-        --bam_path [path to .BAM file]
-        --bed_path [path to .BED file generated in step 1]
-        --output_imgs_dir [path to output folder for images]
-        --patch_size [width, height]
+            --bam_path [path to .BAM file]
+            --bed_path [path to .BED file generated in step 1]
+            --output_imgs_dir [path to output folder for images]
+            --patch_size [width, height]
     
     python ./preprocess/image_generation/augmentate.py 
 
 		--output_imgs_dir [path to output folder for augmentated images]
-        --image_path_file [path to file that includes all the images for augmentation]
-        --patch_size [wdith, height]
+            --image_path_file [path to file that includes all the images for augmentation]
+            --patch_size [wdith, height]
 
 **3. train**
       This script is used to train a set of convolutional neural networks.  
