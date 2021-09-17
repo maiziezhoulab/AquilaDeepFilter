@@ -1,16 +1,9 @@
 #!/home/huangyalin/software/python3.6.4/bin/python3.6
 # encoding: utf-8
-'''
-@author: hyl
-@time: 2019/12/7 15:48
-@desc:
-'''
 import sys
 import os
 from glob import glob
 import argparse
-
-from deepsvfilter.sv_image import *
 #from sv_image_v1 import *
 
 
