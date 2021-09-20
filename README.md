@@ -46,6 +46,7 @@ scipy==1.5.4
 ### Install from github
 1. git clone --recursive https://github.com/maiziezhoulab/AquilaDeepFilter.git
 2. pip install requirements.txt
+3. conda install -c bioconda tabix
 
 ## Running
 
