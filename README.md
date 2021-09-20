@@ -60,11 +60,17 @@ scipy==1.5.4
             --path_to_output_folder [path to output folder]
             --SV_type [DEL or INS]
 
-    python ./preprocess/vcf2bed/bed2vcf.py 
+    python ./post/vcf2bed/bed2vcf.py 
 
 		--path_to_vcf [path to raw vcf file for validation]
-            --path_to_output_folder [path to output folder]
-            --SV_type [DEL or INS]
+            --path_to_original_bed_file [path to raw bed file with index]
+            --path_to_index_file [path to the index]
+            --path_to_predicted_bed_file []
+            --path_to_output_vcf_file_suffix []
+            --path_to_header_vcf_file []
+            --add_chr [index as chr1 or 1. True/chr1 of False/1]
+            --confidence_threshold [minimum confidence threshold]
+            --increment [intervals for threshold gradient]
 
 **2. image generation and augmentate**
       This script is used for data augmentation.
@@ -119,14 +125,21 @@ scipy==1.5.4
 
 	python ./post/truvari/truvari_evaluation.py
 
-		--
+		--path_to_folder_with_gradiant_vcf
+            --path_to_output_folder
+            --vcf_bench
+            --fasta
+            --include_bed
+            --minimum
+            --maximum
 
 **6. ensemble**
 	This script is used to acquire majortiy voting results of all models.  
 
 	python ./post/ensemble/ensemble_.py 
 
-		--
+		--path_to_models_results [input folder of models predition results]
+            --ensemble_output [path of output file after voting]
 
 ## Repo Structure and Output
 
