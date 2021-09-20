@@ -21,6 +21,10 @@ The general workflow of AquilaDeepFilter works as follows:
 
 ## Installation
 ### Dependencies
+truvari==3.0.0
+
+tabix==1.11 [**bioconda**]
+
 tensorflow==2.5.0
 
 tensorboard==2.5.0
