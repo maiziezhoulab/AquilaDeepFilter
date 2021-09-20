@@ -9,7 +9,7 @@ from os import path  # for argument parsing
 
 import tensorflow as tf
 
-from datapipeline.load_imageds import (  # model pipeline for loading image datasets
+from data.load_imageds import (  # model pipeline for loading image datasets
     LoadData, PredictionDataLoader)
 from models import (
     DenseNetModel,

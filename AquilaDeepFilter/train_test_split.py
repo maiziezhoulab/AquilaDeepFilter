@@ -27,14 +27,19 @@ def split_train_test(namespace):
     path_to_images = Path(f"{namespace}")
 
     _images_root = [path for path in path_to_images.glob("*")]
-
+    # print(_images_root)
+    # exit(-1)
     TRAIN_PATH = f"{namespace}_train"
     TEST_PATH = f"{namespace}_test"
+    # print(TRAIN_PATH, TEST_PATH)
+    # exit(-1)
 
     if not os.path.exists(TRAIN_PATH):
         os.mkdir(TRAIN_PATH)
 
     for image in _images_root:
+        print(image.name)
+        # exit(-1)
         if not os.path.exists(os.path.join(TRAIN_PATH, image.name)):
             os.rename(str(image), os.path.join(TRAIN_PATH, image.name))
 
@@ -51,5 +56,5 @@ def split_train_test(namespace):
 
 
 if __name__ == "__main__":
-    for _namescope in ["aqulia"]:
+    for _namescope in ['/home/yunfei/workspace/shortreads_data/experiment_data_shortreads_del/Aquila_train']:
         split_train_test(_namescope)

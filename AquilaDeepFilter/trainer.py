@@ -29,6 +29,7 @@ class ModelManager(tf.Module):
               epochs: int = 0):
 
         if os.path.exists(check_point_dir):
+            model.built = True
             model.load_weights(check_point_dir).expect_partial()
             print(f"Loaded Weights from {check_point_dir} Sucessfully")
 

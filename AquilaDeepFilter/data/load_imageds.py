@@ -8,7 +8,7 @@ import random
 # import path for path functions
 from pathlib import Path
 from typing import Optional, Tuple
-
+import os
 # import tensorflow
 import tensorflow as tf
 
@@ -17,6 +17,7 @@ class PreprocessMixin:
     # function to make process the images
     def process_image(self, image_path):
         # read image into a raw format
+        # print(image_path)
         raw_image = tf.io.read_file(image_path)
         # decode the image
         decode_image = tf.image.decode_png(raw_image, channels=self.channel)
@@ -38,6 +39,13 @@ class LoadData(PreprocessMixin):
 
         # load root path
         self.path_to_dir = Path(path)
+        print(self.path_to_dir)
+        print(os.listdir(self.path_to_dir))
+        # for i in self.path_to_dir.glob("*"):
+        #     print(i)
+        # _ = self.path_to_dir.glob("*/*")
+        # for __ in _:
+        #     print(__)
         self.image_shape = image_shape
         self.channel = channel
         self.all_images_labels = self.load_labels()
@@ -66,6 +74,7 @@ class LoadData(PreprocessMixin):
             self.root_labels[Path(image).parent.name]
             for image in self.all_images_path
         ]
+        # print(self.all_images_path)
 
         return all_images_labels
 
@@ -86,7 +95,8 @@ class LoadData(PreprocessMixin):
         # develop an image dataset
         image_dataset = tf.data.Dataset.from_tensor_slices(
             self.all_images_path)
-
+        # for img in image_dataset:
+        #     print(img)
         # process the image dataset
         image_dataset = image_dataset.map(self.process_image,
                                           num_parallel_calls=autotune)
