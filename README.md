@@ -131,12 +131,13 @@ scipy==1.5.4
 	python ./post/truvari/truvari_evaluation.py
 
 		--path_to_folder_with_gradiant_vcf
-            --path_to_output_folder
-            --vcf_bench
-            --fasta
-            --include_bed
-            --minimum
-            --maximum
+            path_to_folder_with_gradiant_vcf [folder for storing converted vcf files]
+            --path_to_output_folder [path to the folder for generated evaluation result]
+            --vcf_bench [path to the benchmark giab vcf file]
+            --fasta [path to the reference genome]
+            --include_bed [path to the giab gold standard bed file]
+            --minimum [the lower length bound for evaluating SV detection]
+            --maximum [the upper length bound for evaluating SV detection]
 
 **6. ensemble**
 	This script is used to acquire majortiy voting results of all models.  
@@ -148,13 +149,17 @@ scipy==1.5.4
 
 ## Repo Structure and Output
 
-1. The   
+1. The folder of AquilaDeepFilter, post and preprocess have corresponding scripts and codes for Running the AuilaDeepFilter software
 
-2. The 
+2. The dependencies are documented in the requirements.txt.
 
-3. The 'train' command will take   
+3. The 'train' command in 'main.py' script will constantly store the weights for the training epoch with the best validation Acc. and stops after the convergence is reached.
 
-4. The 'predict' command will take t
+4. The 'predict' command in 'main.py' script will generate output in the BED structure (but in .txt file format). It can be then converted back to vcf for evaluation.
+
+5. The docker image of this project will also be uploaded later after all the configuration and testing work are done.
+
+6. The uploaded weights for our model and the toy dataset could be found in zenodo: ...
 
 Citation
 --------
