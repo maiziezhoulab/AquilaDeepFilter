@@ -1,21 +1,18 @@
-#### We provide an example dataset to run the whole pipeline. 
+#### An example dataset of chr21 is provided to test the framework. 
 
-Please download the example data <a href="https://zenodo.org/record/5117764">from Zenodo</a>.
+You can download the example data from  zenodo<a href="https://zenodo.org/record/5528213#.YVIOXmZKiBQ</a>.
 ```
-AquilaSV_exampledata
-|-selected.bam (hg19)
-|-selected.bam.bai
+AquilaDeepFilter_chr21sampledata
+|-10xweb_NA24385_hg19_chr21.bam (hg19)
 |
-|-test_freebayes.vcf (hg19)
+|-Benchmark0.6_chr.zip
 |
-|-genome_hg19.fa         
+|-chr21.fa (hg19)
+|
+|-N24385_10xweb_giab_hg19_aquila.zip         
 ```
 
-Run the whole pipeline:
+Usage:
 ```
-python AquilaSV/bin/AquilaSV_step1.py --bam_file selected.bam --vcf_file test_freebayes.vcf --chr_num 3 --out_dir test_sv
 
-python AquilaSV/bin/AquilaSV_step2.py --out_dir test_sv --chr_num 3 --reference genome_hg19.fa
-
-python AquilaSVbin/AquilaSV_step3.py  --assembly_dir test_sv  --ref_file genome_hg19.fa  --chr_num 3 
 ```
