@@ -163,7 +163,7 @@ scipy==1.5.4
 
 Citation
 --------
-
+Y. Hu, S. V. Mangal, L. Zhang, X. Zhou. An ensemble deep learning framework to refine large deletions in linked-reads. The IEEE International Conference on Bioinformatics and Biomedicine (BIBM) (2021) 
 
 License
 -------
