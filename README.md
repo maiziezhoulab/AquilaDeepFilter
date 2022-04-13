@@ -3,7 +3,7 @@
 ## Introduction 
 The general workflow of AquilaDeepFilter works as follows:
 
-1. Run upstream SV callers to generate the VCF file which includes structrual variants.
+1. Run the upstream SV caller (such as Aquila, Delly) to generate the VCF file which includes structrual variants.
 
 2. Preprocess VCF file to add header if needed (eg. make 1 -> chr1), and split it into INS and DEL for Truvari evaluation.
 
