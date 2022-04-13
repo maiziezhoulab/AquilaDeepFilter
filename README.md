@@ -3,21 +3,21 @@
 ## Introduction 
 The general workflow of AquilaDeepFilter works as follows:
 
-1.getting the vcf calls from the softwares.
+1. Run upstream SV callers to generate the VCF file which includes structrual variants.
 
-2.preprocess to add header, make 1 -> chr1, split into INS and DEL for truvari calling.
+2. Preprocess VCF file to add header if needed (eg. make 1 -> chr1), and split it into INS and DEL for Truvari evaluation.
 
-3.get the truvari evaluated vcf results as the training bed files and raw vcf results as the validation files.  
+3. Get the Truvari evaluated VCF results as the training bed files and raw VCF results as the validation files.  
 
-4.converting to images and augmentation.
+4. Converting to images and augmentation.
 
-5.training with CNNs.
+5. Training with CNNs.
 
-6.get the output bed back to vcfs.
+6. Get the output BED file back to VCF files.
 
-7.ensemble strategy.
+7. Ensemble strategy.
 
-8.evaluate with truvari again to see the performance of our model.
+8. Evaluate with Truvari again to see the performance of our model.
 
 ## Installation
 ### Dependencies
