@@ -23,15 +23,6 @@ def draw_pic_customized(sam_file, sv_list, mean_size, std_size, output_dir, sv_t
                 #imgs.append([im, im_re])
                 im = im.crop((0, 0, width, height//2))
                 imgs.append(im)
-        if sv_type=="DUP":  # not used for now... add later
-            drp_list=getTandemDupDRPList(sam_file, sv_list[i], width)
-            print(len(drp_list))
-            for flag_LR in [1, 2]:
-                bp_position = int(sv_list[i][flag_LR])
-                pic_start, pic_end = bp_position - l_extend, bp_position + r_extend
-                im =draw_tandem_duplication(sam_file, sv_list[i], pic_start, pic_end, flag_LR, drp_list)
-                #imgs.append([im, im_re])
-                imgs.append(im)
         if sv_type=="INS":
             drp_list=getDelDRPList(sam_file, sv_list[i], width, mean_size, std_size)
             for flag_LR in [1, 2]:
