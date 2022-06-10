@@ -6,7 +6,7 @@ def concat_images(image1, image2):
     # Get the widest width.
     width = max(image1.width, image2.width)
     # Add up all the heights.
-    height = sum(image1.height, image2.height)
+    height = image1.height + image2.height
     composite = Image.new('RGB', (width, height))
     # Paste each image below the one before it.
     y = 0
@@ -39,7 +39,7 @@ for line in lines:
         if key in pos_hp2_dict.keys():
             pos_hp2_dict[key].append([abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]])
         else:
-            pos_hp2_dict[key]=[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]
+            pos_hp2_dict[key]=[[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]]
 
 with open(pos_aug, 'r') as f:
     lines = f.readlines()
@@ -58,7 +58,7 @@ for line in lines:
         if key in pos_hp2_dict.keys():
             pos_hp2_dict[key].append([abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]])
         else:
-            pos_hp2_dict[key]=[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]
+            pos_hp2_dict[key]=[[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]]
 
 # print(len(pos_hp1_dict.keys()), len(pos_hp2_dict.keys()))
 # print(pos_hp1_dict)
@@ -86,7 +86,7 @@ for line in lines:
         if key in neg_hp2_dict.keys():
             neg_hp2_dict[key].append([abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]])
         else:
-            neg_hp2_dict[key]=[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]
+            neg_hp2_dict[key]=[[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]]
 
 with open(neg_aug, 'r') as f:
     lines = f.readlines()
@@ -105,7 +105,7 @@ for line in lines:
         if key in neg_hp2_dict.keys():
             neg_hp2_dict[key].append([abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]])
         else:
-            neg_hp2_dict[key]=[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]
+            neg_hp2_dict[key]=[[abs_path, chr_ind, line.split('/')[-1].split('_')[2], line.split('/')[-1].split('_')[3]]]
 
 # print(len(neg_hp1_dict.keys()), len(neg_hp2_dict.keys()))
 # print(neg_hp1_dict)
@@ -115,23 +115,28 @@ for line in lines:
 # concatenate images    #
 #########################
 
-pos_concat_out_dir_ = '/data/maiziezhou_lab/huyf/DeepSVFilter/use_phasing/10xweb/pos_concat/'
+pos_concat_out_dir_ = '/data/maiziezhou_lab/huyf/DeepSVFilter/use_phasing/10xweb/pos_concat/image/'
+f_pos = open('/data/maiziezhou_lab/huyf/DeepSVFilter/use_phasing/10xweb/pos_concat/IMG_PATH.txt', 'w')
+# print(pos_hp2_dict)
 for k in pos_hp1_dict.keys():
     count_ind = 0
     for hp1_half in pos_hp1_dict[k]:
         for hp2_half in pos_hp2_dict[k]:
             img1_p = hp1_half[0]
             img2_p = hp2_half[0]
+            # print(hp1_half, hp2_half)
             
             img1 = Image.open(img1_p)
             img2 = Image.open(img2_p)
             
             concat_img = concat_images(img1, img2)
-            concat_img.save(os.path.join(output_dir, hp1_half[1] + '_' + hp1_half[2] + '_' + hp1_half[3] + '_' + str(count_ind) + '.png'))
+            concat_img.save(os.path.join(pos_concat_out_dir_, hp1_half[1] + '_' + hp1_half[2] + '_' + hp1_half[3] + '_' + str(count_ind) + '.png'))
+            f_pos.write(os.path.join(pos_concat_out_dir_, hp1_half[1] + '_' + hp1_half[2] + '_' + hp1_half[3] + '_' + str(count_ind) + '.png') + '\n')
             count_ind += 1
+f_pos.close()
             
-            
-neg_concat_out_dir_ = '/data/maiziezhou_lab/huyf/DeepSVFilter/use_phasing/10xweb/neg_concat/'
+neg_concat_out_dir_ = '/data/maiziezhou_lab/huyf/DeepSVFilter/use_phasing/10xweb/neg_concat/image/'
+f_neg = open('/data/maiziezhou_lab/huyf/DeepSVFilter/use_phasing/10xweb/neg_concat/IMG_PATH.txt', 'w')
 for k in neg_hp1_dict.keys():
     count_ind = 0
     for hp1_half in neg_hp1_dict[k]:
@@ -143,6 +148,7 @@ for k in neg_hp1_dict.keys():
             img2 = Image.open(img2_p)
             
             concat_img = concat_images(img1, img2)
-            concat_img.save(os.path.join(output_dir, hp1_half[1] + '_' + hp1_half[2] + '_' + hp1_half[3] + '_' + str(count_ind) + '.png'))
-            count_ind += 1            
-            
+            concat_img.save(os.path.join(neg_concat_out_dir_, hp1_half[1] + '_' + hp1_half[2] + '_' + hp1_half[3] + '_' + str(count_ind) + '.png'))
+            count_ind += 1
+            f_neg.write(os.path.join(neg_concat_out_dir_, hp1_half[1] + '_' + hp1_half[2] + '_' + hp1_half[3] + '_' + str(count_ind) + '.png') + '\n')
+f_neg.close()
