@@ -173,41 +173,34 @@ if __name__ == "__main__":
                               default=False,
                               help='to use custom input processing units',
                               dest="custom_input_preprocessing")
-
-    parser_train.add_argument(
-        "--fine_tune_at",
-        type=int,
-        default=0,
-        help="fine tune network from the layer, default to none",
-        dest="fine_tune_at")
-    parser_train.add_argument(
-        '--checkpoint_dir',
-        required=True,
-        help='path to directory where checkpoints needs to be saved',
-        dest="checkpoint_dir")
+    parser_train.add_argument("--fine_tune_at",
+                              type=int,
+                              default=0,
+                              help="fine tune network from the layer, default to none",
+                             dest="fine_tune_at")
+    parser_train.add_argument('--checkpoint_dir',
+                              required=True,
+                              help='path to directory where checkpoints needs to be saved',
+                              dest="checkpoint_dir")
     parser_train.add_argument('--tensorboard_log_dir',
                               required=True,
                               help='tensorboard summary',
                               dest="tensorboard_log_dir")
-
-    parser_train.add_argument(
-        "--height",
-        default=224,
-        type=int,
-        help="height of input images, default value is 224",
-        dest="height")
-    parser_train.add_argument(
-        "--width",
-        default=224,
-        type=int,
-        help="width of input images, default value is 224",
-        dest="width")
-    parser_train.add_argument(
-        "--channel",
-        default=3,
-        type=int,
-        help="channel of input images, default value is 3",
-        dest="channel")
+    parser_train.add_argument("--height",
+                              default=224,
+                              type=int,
+                              help="height of input images, default value is 224",
+                              dest="height")
+    parser_train.add_argument("--width",
+                              default=224,
+                              type=int,
+                              help="width of input images, default value is 224",
+                              dest="width")
+    parser_train.add_argument("--channel",
+                              default=3,
+                              type=int,
+                              help="channel of input images, default value is 3",
+                              dest="channel")
 
     parser_train.set_defaults(func=train_model)
 
