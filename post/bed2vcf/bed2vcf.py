@@ -11,11 +11,6 @@ python bed2vcf.py \
       --add_chr False
 """
 
-#ori_bed_file = '/data/maiziezhou_lab/huyf/DeepSVFilter/vcf2bed/Aquila_final_sorted_reformat_sorted_del_add_header_del_test.bed'  # input .bed for the model 
-#predicted_bed_file = '/data/maiziezhou_lab/huyf/DeepSVFilter/results/aquila_filter/filteredSVs/results.txt'  # output .bed for the model
-#out_vcf_file = '/data/maiziezhou_lab/huyf/DeepSVFilter/results/aquila_filter/filteredSVs/filteredSVs.vcf'  # output of this script bed2vcf.py
-#header_vcf_file = '/data/maiziezhou_lab/huyf/DeepSVFilter/Aquila_stLFR_/Aquila_final_sorted_reformat_sorted_del_add_header.vcf'  # original vcf file for copying headers
-#index_file = '/data/maiziezhou_lab/huyf/DeepSVFilter/vcf2bed/Aquila_final_sorted_reformat_sorted_del_add_header_del_mapping_to_vcf_test.txt'  # index of ori_bed_file
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='converting predicted results back to vcf format')
     parser.add_argument('--path_to_original_bed_file',
