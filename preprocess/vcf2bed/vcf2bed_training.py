@@ -174,16 +174,16 @@ def generating_bed_for_training(vcf_folder, SV, output_folder):
             use += 1
             # print(del_)
     print(use)
-    # out_file_ins = open('/data/maiziezhou_lab/huyf/DeepSVFilter/vcf2bed/HG002_SVs_Tier1_v0.6_chr21_ins.bed', 'w')
-    # out_file_del = open('/data/maiziezhou_lab/huyf/DeepSVFilter/vcf2bed/HG002_SVs_Tier1_v0.6_chr21_del.bed', 'w')
+    # out_file_ins = open('/data/maiziezhou_lab/huyf/vcf2bed/HG002_SVs_Tier1_v0.6_chr21_ins.bed', 'w')
+    # out_file_del = open('/data/maiziezhou_lab/huyf/vcf2bed/HG002_SVs_Tier1_v0.6_chr21_del.bed', 'w')
     # Aquila_final_sorted_reformat_sorted_del_add_header.vcf
-    # out_file_ins = open('/data/maiziezhou_lab/huyf/DeepSVFilter/vcf2bed/Aquila_final_sorted_reformat_sorted_del_add_header_ins_test.bed', 'w')
-    # out_file_del1 = open('/data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/stLFR/10xweb_NA24385_deletion_GT1.bed', 'w')
-    # out_file_del2 = open('/data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/stLFR/10xweb_NA24385_deletion_GT2.bed', 'w')
+    # out_file_ins = open('/data/maiziezhou_lab/huyf/vcf2bed/Aquila_final_sorted_reformat_sorted_del_add_header_ins_test.bed', 'w')
+    # out_file_del1 = open('/data/maiziezhou_lab/huyf/bed_files/stLFR/10xweb_NA24385_deletion_GT1.bed', 'w')
+    # out_file_del2 = open('/data/maiziezhou_lab/huyf/bed_files/stLFR/10xweb_NA24385_deletion_GT2.bed', 'w')
     
     # # mapping back to vcf file for truvari eval.
     # #########
-    # # out_file_del_index = open('/data/maiziezhou_lab/huyf/DeepSVFilter/vcf2bed/Aquila_final_sorted_reformat_sorted_del_add_header_del_mapping_to_vcf_test.txt', 'w')
+    # # out_file_del_index = open('/data/maiziezhou_lab/huyf/vcf2bed/Aquila_final_sorted_reformat_sorted_del_add_header_del_mapping_to_vcf_test.txt', 'w')
     
     # index_ = 0
     # for line in dels:
@@ -239,9 +239,7 @@ def generating_bed_for_training(vcf_folder, SV, output_folder):
         print(vcf_folder.split('/'))
         out_file_del1 = open(os.path.join(output_folder, vcf_folder.split('/')[-2] + "_del_positive1.bed"), 'w')
         out_file_del2 = open(os.path.join(output_folder, vcf_folder.split('/')[-2] + "_del_positive2.bed"), 'w')
-        # out_file_ins1 = open('/data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/10xweb/10xweb_NA24385_insertion_GT1.bed', 'w')
-        # out_file_ins2 = open('/data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/10xweb/10xweb_NA24385_insertion_GT2.bed', 'w')
-        #########
+
         
         index_ = 0
         for line in dels:
@@ -271,8 +269,8 @@ def generating_bed_for_training(vcf_folder, SV, output_folder):
 
 if __name__ == '__main__':
     """
-    python vcf2bed_training.py --vcf_dir /data/maiziezhou_lab/huyf/DeepSVFilter/Aquila_stLFR_/delly_call_HG002hs37d5_60x_del_50/ --output_folder /data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/HG002_60x_shortreads/ --SV_type DEL
-    python vcf2bed_training.py --vcf_dir /data/maiziezhou_lab/huyf/DeepSVFilter/Aquila_stLFR_/delly_call_NA24385_illumina_hg19_del_50/ --output_folder /data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/NA24385_illumina_shortreads/ --SV_type DEL
+    python vcf2bed_training.py --vcf_dir /data/maiziezhou_lab/huyf/Aquila_stLFR_/delly_call_HG002hs37d5_60x_del_50/ --output_folder /data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/HG002_60x_shortreads/ --SV_type DEL
+    python vcf2bed_training.py --vcf_dir /data/maiziezhou_lab/huyf/Aquila_stLFR_/delly_call_NA24385_illumina_hg19_del_50/ --output_folder /data/maiziezhou_lab/huyf/DeepSVFilter/bed_files/NA24385_illumina_shortreads/ --SV_type DEL
     """
     parser = argparse.ArgumentParser(description='convert truvari vcfs to training .bed files')
     #subparsers = parser.add_subparsers(help='preprocess, augmentate, train or predict')
@@ -301,16 +299,3 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     generating_bed_for_training(args.vcf_dir, args.SV_type, args.output_folder)
-    # args.func(args)
-    
-    # if args.mean_insert_size!=None and args.sd_insert_size!=None:
-    #     trans2img(args.bam_path, args.sv_type, args.bed_path, args.output_imgs_dir, args.patch_size, args.mean_insert_size, args.sd_insert_size)
-    # else:
-    #     mean_size, std_size = estimateInsertSizes(args.bam_path, alignments=1000000)
-    #     trans2img(args.bam_path, args.sv_type, args.bed_path, args.output_imgs_dir, args.patch_size, mean_size, std_size)
-    # image_path_file='/data/maiziezhou_lab/huyf/DeepSVFilter_new/example/result/images/IMG_PATH.txt'
-    # output_imgs_dir='/data/maiziezhou_lab/huyf/DeepSVFilter_new/example/result/images/test'
-    # if args.mode == 'train':
-    #     generating_bed_for_training(args.vcf_dir)
-    # else:
-    #     generating_bed_for_validation(args.vcf_dir)
