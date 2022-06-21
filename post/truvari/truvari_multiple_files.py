@@ -44,6 +44,8 @@ if __name__ == '__main__':
         print(folder_list_1)
         for f2 in folder_list_1:
             # print(f2, batch_index, model_name)
+            n = f2.split('/')[-1]
+            d = os.path.dirname(f2)
             os.system('bgzip -c ' + f2 + ' > ' + f2 + '.gz')
             os.system('tabix -p vcf ' + f2 +'.gz')
             """
@@ -51,32 +53,10 @@ if __name__ == '__main__':
             """
             os.system('truvari bench -b /data/maiziezhou_lab/Datasets/Benchmark0.6_chr/by_type/HG002_SVs_Tier1_v0.6_chr_del_removechrY.vcf.gz \
                                      -c ' + f2 + '.gz \
-                                     -o ./N24385_stlfr_giab_hg19_v0.6_Tier1bed_0.1_0.1_200_WGS_reformat_50up_del_' + f2 + '_' + batch_index + '_' + model_name + 'Filtered \
+                                     -o ' + d + 'p01_P01_r200_min50_' + n + '_' + batch_index + '_' + model_name + 'Filtered \
                                      -f /data/maiziezhou_lab/Softwares/refdata-hg19-2.1.0/fasta/genome.fa \
                                      --includebed /data/maiziezhou_lab/huyf/DeepSVFilter/Aquila_stLFR_/HG002_SVs_Tier1_v0.6_chr_removechrY.bed \
                                      --passonly -p 0.1 -P 0.1 -r 200 --sizemin 50')
-    # print(folder_list_2)
-    # exit(-1)
-    # for fd in folder_list_1:
-    #     vcf_files = os.listdir(fd)
-    #     for f in vcf_files:
-    #         if not f.endswith('.vcf'):
-    #             continue
-    #         abs_path = os.path.join(fd, f)
-    #         model_ = fd.split('/')[-1]
-    #         print(model_)
-    # exit(-1)
-    # os.system('bgzip -c ' + abs_path + ' > ' + abs_path + '.gz')
-    # os.system('tabix -p vcf ' + abs_path +'.gz')
-    # """
-    # 50 ~
-    # """
-    # os.system('truvari bench -b /data/maiziezhou_lab/Datasets/Benchmark0.6_chr/by_type/HG002_SVs_Tier1_v0.6_chr_del_removechrY.vcf.gz \
-    #                          -c ' + abs_path + '.gz \
-    #                          -o ./N24385_stlfr_giab_hg19_v0.6_Tier1bed_0.1_0.1_200_WGS_reformat_50up_del_' + f + '_' + batch_index + '_' + model_[:-4] + 'Filtered \
-    #                          -f /data/maiziezhou_lab/Softwares/refdata-hg19-2.1.0/fasta/genome.fa \
-    #                          --includebed /data/maiziezhou_lab/huyf/DeepSVFilter/Aquila_stLFR_/HG002_SVs_Tier1_v0.6_chr_removechrY.bed \
-    #                          --passonly -p 0.1 -P 0.1 -r 200 --sizemin 50')
 
     """
     sample usage for truvari eval
@@ -99,25 +79,4 @@ if __name__ == '__main__':
                              -f /data/maiziezhou_lab/Softwares/refdata-hg19-2.1.0/fasta/genome.fa \
                              --includebed /data/maiziezhou_lab/huyf/DeepSVFilter/Aquila_stLFR_/HG002_SVs_Tier1_v0.6_chr_removechrY.bed \
                              --passonly -p 0.1 -P 0.1 -r 200 --sizemin 50')
-            """
-
-    # for fd in folder_list_2:
-    #     vcf_files = os.listdir(fd)
-    #     for f in vcf_files:
-    #         if not f.endswith('.vcf'):
-    #             continue
-    #         abs_path = os.path.join(fd, f)
-    #         model_ = fd.split('/')[-1]
-    #         print(model_)
-    #         # exit(-1)
-    #         os.system('bgzip -c ' + abs_path + ' > ' + abs_path + '.gz')
-    #         os.system('tabix -p vcf ' + abs_path +'.gz')
-    #         """
-    #         50 ~
-    #         """
-    #         os.system('truvari bench -b /data/maiziezhou_lab/Datasets/Benchmark0.6_chr/by_type/HG002_SVs_Tier1_v0.6_chr_del_removechrY.vcf.gz \
-    #                                  -c ' + abs_path + '.gz \
-    #                                  -o ./N24385_10xweb_giab_hg19_v0.6_Tier1bed_0.1_0.1_200_WGS_reformat_50up_del_' + f + '_' + batch_index + '_' + model_[:-4] + 'Filtered \
-    #                                  -f /data/maiziezhou_lab/Softwares/refdata-hg19-2.1.0/fasta/genome.fa \
-    #                                  --includebed /data/maiziezhou_lab/huyf/DeepSVFilter/Aquila_stLFR_/HG002_SVs_Tier1_v0.6_chr_removechrY.bed \
-    #                                  --passonly -p 0.1 -P 0.1 -r 200 --sizemin 50')
+    """
