@@ -48,7 +48,35 @@ scipy==1.5.4
 2. pip install requirements.txt
 3. conda install -c bioconda tabix
 
-## Running
+## Pipeline
+
+Part 1. Image construction
+
+a. create bed files for SV image construction (training data/evaluation data)
+
+b. generate image from the bed files and bam files
+
+c. augmentate the images
+
+Part 2. Model training
+
+a. split the training data with k-fold settings
+
+b. train the model with documented loss and metrics (model weights saved)
+
+Part 3. Truvari evaluation
+
+a. predict the evaluation data with the saved weights
+
+(a-optional. ensemble prediction results from several models)
+
+b. generate several filtered bed/vcf files with different thresholds
+
+c. prepare (sort, zip and index) the vcf files for Truvari input format
+
+d. perform evaluation and report metrics
+
+## How to run the scripts
 
 **1. file format conversion**
       This script is used to extract SV signals for image generation.
@@ -130,8 +158,8 @@ scipy==1.5.4
 
 	python ./post/truvari/truvari_evaluation.py
 
-		--path_to_folder_with_gradiant_vcf
-            path_to_folder_with_gradiant_vcf [folder for storing converted vcf files]
+	    --path_to_folder_with_gradiant_vcf
+            --path_to_folder_with_gradiant_vcf [folder for storing converted vcf files]
             --path_to_output_folder [path to the folder for generated evaluation result]
             --vcf_bench [path to the benchmark giab vcf file]
             --fasta [path to the reference genome]
