@@ -50,7 +50,7 @@ scipy==1.5.4
 
 ## Pipeline
 
-Part 1. Image construction
+**Part 1. Image construction**
 
 a. create bed files for SV image construction (training data/evaluation data)
 
@@ -58,13 +58,13 @@ b. generate image from the bed files and bam files
 
 c. augmentate the images
 
-Part 2. Model training
+**Part 2. Model training**
 
 a. split the training data with k-fold settings
 
 b. train the model with documented loss and metrics (model weights saved)
 
-Part 3. Truvari evaluation
+**Part 3. Truvari evaluation**
 
 a. predict the evaluation data with the saved weights
 
