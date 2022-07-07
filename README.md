@@ -33,7 +33,7 @@ matplotlib==3.1.0
 
 numpy==1.19.5
 
-opencv-python==3.1.0.4
+opencv-python
 
 Pillow==7.2.0
 
@@ -45,7 +45,7 @@ scipy==1.5.4
 
 ### Install from github
 1. git clone --recursive https://github.com/maiziezhoulab/AquilaDeepFilter.git
-2. conda create -n [EnvName] python=3.7
+2. conda create -n [EnvName] python=3.8
 3. source activate [EnvName]
 4. pip install -r requirements.txt
 5. conda install -c bioconda tabix
