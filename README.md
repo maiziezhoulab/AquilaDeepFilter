@@ -78,9 +78,13 @@ use **augmentate.py** to augmentate the images
 
 **Part 2. Model training**
 
-a. split the training data with k-fold settings
+a. split the training data with customized ratio
 
-b. train the model with documented loss and metrics (model weights saved)
+use **train_test_split.py** to split the data
+
+b. train the model with the split images in train and val folders
+
+use **train** in **main.py** to train the model with saved checkpoints and loss
 
 **Part 3. Truvari evaluation**
 
