@@ -3,7 +3,7 @@
 ## Introduction 
 The general workflow of AquilaDeepFilter works as follows:
 
-![alt text](https://github.com/maiziezhoulab/AquilaDeepFilter/blob/main/aquila_deepfilter_pipeline03192022.eps)
+![image](https://github.com/maiziezhoulab/AquilaDeepFilter/blob/main/img.png)
 
 1. Run the upstream SV caller (such as Aquila, Delly) to generate the VCF file which includes structrual variants.
 
