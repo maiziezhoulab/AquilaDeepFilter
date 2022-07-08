@@ -2,6 +2,34 @@ import sys
 import os
 from glob import glob
 import argparse
+import pysam
+import numpy as np
+
+
+def estimateInsertSizes(sam_file_path, alignments=1000000):
+    print("==================Estimate Insertion Size==================")
+    inserts = []
+    count = 0
+    sam_file = pysam.AlignmentFile(sam_file_path, "rb")
+    for read in sam_file:
+        if read.is_proper_pair and read.is_paired  and read.is_read1 and (not read.is_unmapped) and (not read.mate_is_unmapped) and (not read.is_duplicate) and (not read.is_secondary) and (not read.is_supplementary):
+            if (read.reference_start < read.next_reference_start and (not read.is_reverse) and read.mate_is_reverse) or (read.reference_start > read.next_reference_start and read.is_reverse and (not read.mate_is_reverse)):
+                count += 1
+                if count <= alignments:
+                   inserts.append(abs(read.tlen))
+                else:
+                    break
+    sam_file.close()
+    inserts = sorted(inserts)
+    total_num = len(inserts)
+    l = int(0.05 * total_num)
+    r = int(0.95 * total_num)
+    
+    inserts = inserts[l:r] 
+    insert_mean, insert_std = int(np.mean(inserts)), int(np.std(inserts))
+    print("Mean of the insert size is ", insert_mean, "Standard deviation of the insert size is ", insert_std)
+    return insert_mean, insert_std
+
 
 def draw_pic_customized(sam_file, sv_list, mean_size, std_size, output_dir, sv_type, width, height, hp_):  # deal with the situation when width != height
     l_extend, r_extend = width//2, width-width//2
