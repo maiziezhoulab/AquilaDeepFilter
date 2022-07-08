@@ -64,7 +64,13 @@ a. create bed files for SV image construction (training data/evaluation data)
 
 use **vcf2bed_training.py** and **vcf2bed_val.py** to generate .bed files before generating images
 
-b. generate image from the .bed files (generated in last step) and .bam files (used for SV calling)
+will have **3** .bed files as the output of **vcf2bed_training.py**
+
+will have **1** .bed file as the output of **vcf2bed_val.py**
+
+b. generate image from the .bed files (generated in last step) and .bam files (used for SV calling)\
+
+use **bed2image.py** to generate training/testing images
 
 c. augmentate the images generated in last step
 
