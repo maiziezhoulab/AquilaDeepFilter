@@ -62,6 +62,8 @@ scipy==1.5.4
 
 a. create bed files for SV image construction (training data/evaluation data)
 
+use **vcf2bed_training.py** and **vcf2bed_val.py** to generate .bed files before generating images
+
 b. generate image from the bed files and bam files
 
 c. augmentate the images
@@ -91,13 +93,13 @@ d. perform evaluation and report metrics
 
 	python ./preprocess/vcf2bed/vcf2bed_training.py 
 
-		--vcf_dir [path of folder for GT vcf input]
+		--vcf_dir [path to folder of Truvari evaluation]
             --output_folder [path to output folder]
             --SV_type [DEL or INS]
 
     python ./preprocess/vcf2bed/vcf2bed_val.py 
 
-		--path_to_vcf [path to raw vcf file for validation]
+		--path_to_vcf [path to vcf file of upstream caller]
             --path_to_output_folder [path to output folder]
             --SV_type [DEL or INS]
 
