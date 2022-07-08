@@ -3,9 +3,6 @@ import os
 from glob import glob
 import argparse
 
-from deepsvfilter.sv_image import *
-
-
 def draw_pic_customized(sam_file, sv_list, mean_size, std_size, output_dir, sv_type, width, height, hp_):  # deal with the situation when width != height
     l_extend, r_extend = width//2, width-width//2
     for i in range(len(sv_list)):
