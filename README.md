@@ -1,9 +1,7 @@
 # AquilaDeepFilter
 
 ## Introduction 
-The general workflow of AquilaDeepFilter works as follows:
 
-![image](https://github.com/maiziezhoulab/AquilaDeepFilter/blob/main/img.png)
 
 <!-- 1. Run the upstream SV caller (such as Aquila, Delly) to generate the VCF file which includes structrual variants.
 
@@ -21,7 +19,11 @@ The general workflow of AquilaDeepFilter works as follows:
 
 8. Evaluate with Truvari again to see the performance of our model. -->
 
-Computational methods based on whole genome linked-reads and short reads have been successful in genome assembly and detection of structural variants (SVs). Numerous variant callers that rely on linked-reads and short reads can detect genetic variations, including SVs.  A shortcoming of existing tools is a propensity for overestimating SVs, especially for deletions. Optimizing the advantages of linked-read and short-read sequencing technologies would thus benefit from an additional step to effectively identify and eliminate false positive large deletions. Here, we introduce a novel tool, AquilaDeepFilter, aiming to automatically filter genome-wide false positive large deletions. Our approach relies on transforming sequencing data into an image and then relying on several convolutional neural networks to improve classification of candidate deletions as such. Input data take into account multiple alignment signals including read depth, split reads and discordant read pairs. AquilaDeepFilter is thus an effective SV refinement framework that can improve SV calling for both linked-reads and short-read data.
+	Computational methods based on whole genome linked-reads and short reads have been successful in genome assembly and detection of structural variants (SVs). Numerous variant callers that rely on linked-reads and short reads can detect genetic variations, including SVs.  A shortcoming of existing tools is a propensity for overestimating SVs, especially for deletions. Optimizing the advantages of linked-read and short-read sequencing technologies would thus benefit from an additional step to effectively identify and eliminate false positive large deletions. Here, we introduce a novel tool, AquilaDeepFilter, aiming to automatically filter genome-wide false positive large deletions. Our approach relies on transforming sequencing data into an image and then relying on several convolutional neural networks to improve classification of candidate deletions as such. Input data take into account multiple alignment signals including read depth, split reads and discordant read pairs. AquilaDeepFilter is thus an effective SV refinement framework that can improve SV calling for both linked-reads and short-read data.
+
+The general workflow of AquilaDeepFilter works as follows:
+
+![image](https://github.com/maiziezhoulab/AquilaDeepFilter/blob/main/img.png)
 
 ## Installation
 ### Dependencies
