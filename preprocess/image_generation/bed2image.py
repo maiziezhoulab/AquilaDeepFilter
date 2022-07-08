@@ -4,6 +4,8 @@ from glob import glob
 import argparse
 import pysam
 import numpy as np
+from PIL import Image
+from PIL import ImageDraw
 
 
 def estimateInsertSizes(sam_file_path, alignments=1000000):
@@ -29,6 +31,123 @@ def estimateInsertSizes(sam_file_path, alignments=1000000):
     insert_mean, insert_std = int(np.mean(inserts)), int(np.std(inserts))
     print("Mean of the insert size is ", insert_mean, "Standard deviation of the insert size is ", insert_std)
     return insert_mean, insert_std
+    
+
+def getDelDRPList(sam_file_path, deletion, patch_size, mean_insert_size, sd_insert_size):
+    l_extend, r_extend = patch_size//2, patch_size-patch_size//2
+    left_list=[]
+    sam_file = pysam.AlignmentFile(sam_file_path, "rb")
+    for read in sam_file.fetch(deletion[0], deletion[1]-l_extend-patch_size, deletion[1]+r_extend):
+         if read.is_paired and (not read.is_unmapped) and (not read.mate_is_unmapped) and read.reference_start < read.next_reference_start:
+             insert_size=abs(read.tlen)
+             if (not read.is_reverse) and read.mate_is_reverse and (insert_size - mean_insert_size) > 3 * sd_insert_size:
+                 left_list.append(read.qname)
+    sam_file.close()
+    right_list=[]
+    sam_file = pysam.AlignmentFile(sam_file_path, "rb")
+    for read in sam_file.fetch(deletion[0], deletion[2]-l_extend, deletion[2]+r_extend+patch_size):
+         if read.is_paired and (not read.is_unmapped) and (not read.mate_is_unmapped) and read.reference_start > read.next_reference_start:
+             insert_size=abs(read.tlen)
+             if read.is_reverse and (not read.mate_is_reverse) and (insert_size - mean_insert_size) > 3 * sd_insert_size:
+                 right_list.append(read.qname)
+    sam_file.close()
+    drplist=list(set(left_list).intersection(set(right_list)))
+    return drplist
+
+
+def draw_deletion(sam_file_path, record, pic_start, pic_end, flag_LR, drp_list):
+    
+    scale_pix = 1 
+    pic_length = (pic_end - pic_start)
+    im = Image.new("RGB", [pic_length * scale_pix, (pic_length // 2 - 1) * scale_pix], "black") 
+    im_draw = ImageDraw.Draw(im)
+
+    column_statistics_list = [[0, 0, 0, 0] for _ in range(pic_length)]
+    sam_file = pysam.AlignmentFile(sam_file_path, "rb")
+    for read in sam_file.fetch(record[0], pic_start, pic_end):
+        if read.is_unmapped:
+            continue
+        read_lr = (read.reference_start + 1, read.reference_end)
+        
+        flag_drp = 0
+        if read.qname in drp_list:
+            if str(flag_LR) == '1':
+                if read.reference_start < read.next_reference_start:
+                    flag_drp=1
+            else:
+                if read.reference_start > read.next_reference_start:
+                    flag_drp=1
+        
+        flag_sr = 0
+        if str(flag_LR) == '1':
+            if is_right_soft_clipped_read(read):
+                flag_sr=1
+        else:
+            if is_left_soft_clipped_read(read):
+                flag_sr=1
+
+        read_pic_l = (read_lr[0] - pic_start) if read_lr[0] >= pic_start else 0
+        read_pic_r = (read_lr[1] - pic_start) if read_lr[1] <= pic_end else pic_length - 1
+        
+        for i in range(read_pic_l, read_pic_r):
+            column_statistics_list[i][0] += 1
+            if flag_drp == 1 and flag_sr == 1:
+                column_statistics_list[i][3] += 1
+            elif flag_drp == 1:
+                column_statistics_list[i][1] += 1
+            elif flag_sr == 1:
+                column_statistics_list[i][2] += 1
+    sam_file.close()
+    for x in range(len(column_statistics_list)):
+        y = 0
+        rd_count = column_statistics_list[x][0]
+        drp_count = column_statistics_list[x][1]
+        sr_count = column_statistics_list[x][2]
+        both_count = column_statistics_list[x][3]
+        
+        # SR&RP
+        if both_count != 0:
+            base_rgb = tuple([255, 255, 255])
+            im_draw.rectangle((x * scale_pix, y, x * scale_pix + scale_pix, both_count * scale_pix), fill=base_rgb)
+        # split read
+        if sr_count != 0:
+            base_rgb = tuple([255, 0, 255])
+            im_draw.rectangle(
+                (x * scale_pix, both_count * scale_pix, x * scale_pix + scale_pix, (both_count + sr_count) * scale_pix),
+                fill=base_rgb)
+        # discordant read pair
+        if drp_count != 0:
+            base_rgb = tuple([255, 255, 0])
+            im_draw.rectangle(
+                (x * scale_pix, (both_count + sr_count) * scale_pix, x * scale_pix + scale_pix,
+                 (drp_count + sr_count + both_count) * scale_pix), fill=base_rgb)
+
+        # read depth
+        if rd_count != 0:
+            base_rgb = tuple([255, 0, 0])
+            im_draw.rectangle(
+                (x * scale_pix, (drp_count + sr_count + both_count) * scale_pix, x * scale_pix + scale_pix,
+                 (rd_count) * scale_pix),
+                fill=base_rgb)
+    im_draw.rectangle(
+        (((pic_end - pic_start) // 2) * scale_pix, 0, ((pic_end - pic_start) // 2) * scale_pix,
+         pic_length * scale_pix), fill=tuple([0, 255, 255]))
+
+    #return im, im.transpose(Image.FLIP_LEFT_RIGHT)
+    return im
+
+
+def is_left_soft_clipped_read(read): 
+    if(read.cigartuples[0][0]==4):
+        return True
+    else:
+        return False
+
+def is_right_soft_clipped_read(read):
+    if(read.cigartuples[-1][0]==4):
+        return True
+    else:
+        return False
 
 
 def draw_pic_customized(sam_file, sv_list, mean_size, std_size, output_dir, sv_type, width, height, hp_):  # deal with the situation when width != height
@@ -154,7 +273,7 @@ if __name__ == '__main__':
     parser.add_argument('--output_imgs_dir', dest='output_imgs_dir', required=True, help='output image folder')
     parser.add_argument('--mean_insert_size', dest='mean_insert_size',type=int, help='mean of the insert size')
     parser.add_argument('--sd_insert_size', dest='sd_insert_size',type=int, help='standard deviation of the insert size')
-    parser.add_argument('--hp', dest='sd_insert_size',type=int, help='haplotype index, 1 or 2 (set to 0 if not using phasing info mode)')
+    parser.add_argument('--hp', dest='hp', type=int, default=0, help='haplotype index, 1 or 2 (set to 0 if not using phasing info mode)')
     
     # parser_preprocess.set_defaults(func=preprocess)
     
