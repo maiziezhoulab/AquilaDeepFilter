@@ -68,11 +68,13 @@ will have **3** .bed files as the output of **vcf2bed_training.py**
 
 will have **1** .bed file as the output of **vcf2bed_val.py**
 
-b. generate image from the .bed files (generated in last step) and .bam files (used for SV calling)\
+b. generate image from the .bed files (generated in last step) and .bam files (used for SV calling)
 
-use **bed2image.py** to generate training/testing images
+use **bed2image.py** to generate training/testing images. For training images, positive samples are generated from 2 .bed files corresponding to TP.vcf and FN.vcf while negative samples are generated from 1 .bed file corresponding to FP.vcf
 
 c. augmentate the images generated in last step
+
+use **augmentate.py** to augmentate the images
 
 **Part 2. Model training**
 
