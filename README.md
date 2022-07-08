@@ -39,7 +39,7 @@ Pillow==7.2.0
 
 pysam==0.15.4
 
-scikit-learn==0.19.2
+scikit-learn
 
 scipy==1.5.4
 
