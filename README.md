@@ -80,7 +80,7 @@ use **augmentate.py** to augmentate the images
 
 a. split the training data with customized ratio
 
-use **train_test_split.py** to split the data
+use **train_test_split.py** to split the data. Specifically, the input folder should have 2 subfolders for positive and negative samples respectively.
 
 b. train the model with the split images in train and val folders
 
