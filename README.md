@@ -145,6 +145,13 @@ d. perform evaluation and report metrics
             --patch_size [wdith, height]
 
 **3. train**
+      This script is used to split train/val set.  
+
+	python ./AquilaDeepFilter/train_test_split.py
+
+		--ratio 0.8 [training set ratio]
+            --input_dir [path to folder with pos/neg folders]
+
       This script is used to train AquilaDeepFilter.  
 
 	python ./AquilaDeepFilter/main.py train
