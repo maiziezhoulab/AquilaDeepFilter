@@ -128,7 +128,7 @@ d. perform evaluation and report metrics
             --increment [intervals for threshold gradient]
 
 **2. image generation and augmentate**
-      This script is used for data augmentation.
+      These scripts are used for image generation and data augmentation.
 
 	python ./preprocess/image_generation/bed2image.py 
 
@@ -145,14 +145,12 @@ d. perform evaluation and report metrics
             --patch_size [wdith, height]
 
 **3. train**
-      This script is used to split train/val set.  
+      These scripts are used to train AquilaDeepFilter and split train/val set.  
 
 	python ./AquilaDeepFilter/train_test_split.py
 
 		--ratio 0.8 [training set ratio]
             --input_dir [path to folder with pos/neg folders]
-
-      This script is used to train AquilaDeepFilter.  
 
 	python ./AquilaDeepFilter/main.py train
 
