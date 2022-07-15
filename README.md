@@ -152,8 +152,8 @@ d. perform evaluation and report metrics
 		--ratio 0.8 [training set ratio]
             --input_dir [path to folder with generated images]
 	    --output_dir [path to output folder with split train/val folders]
-
-	python ./AquilaDeepFilter/main.py train
+    
+    python ./AquilaDeepFilter/main.py train
 
 		--model_arch [xception,densenet,efficientnet,vgg,resnet,mobilenet]
             --batch_size BATCH_SIZE [number of samples in one batch]
