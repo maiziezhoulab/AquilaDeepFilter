@@ -11,7 +11,7 @@ def split_train_test(namespace, out_dir, ratio):
 
     TRAIN_PATH = os.path.join(out_dir, 'train')
     VAL_PATH = os.path.join(out_dir, 'test')
-    print("project train/val folder path : ", TRAIN_PATH, TEST_PATH)
+    print("project train/val folder path : ", TRAIN_PATH, VAL_PATH)
     # exit(-1)
 
     if not os.path.exists(VAL_PATH):
@@ -33,15 +33,21 @@ def split_train_test(namespace, out_dir, ratio):
             #     os.rename(str(image), os.path.join(TRAIN_PATH, image.name))
         random.shuffle(temp)
         
-        train_part = temp[:int(0.8*len(temp))]
-        val_part = temp[1-int(0.8*len(temp)):]
+        train_part = temp[:int(ratio*len(temp))]
+        val_part = temp[1-int(ratio*len(temp)):]
         
         cp_out_dir_train = os.path.join(TRAIN_PATH, f)
         cp_out_dir_val = os.path.join(VAL_PATH, f)
-
+        
+        count = 0
         for e in train_part:
+            count += 1
+            print(str(count) + "/" + str(len(train_part)))
             os.system("cp " + e + " " + cp_out_dir_train)
+        count = 0
         for e in val_part:
+            count += 1
+            print(str(count) + "/" + str(len(val_part)))
             os.system("cp " + e + " " + cp_out_dir_val)
 
 
