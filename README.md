@@ -151,7 +151,7 @@ d. perform evaluation and report metrics
 
 		--ratio 0.8 [training set ratio]
             --input_dir [path to folder with generated images]
-	    --output_dir [path to output folder with split train/val folders]
+	        --output_dir [path to output folder with split train/val folders]
     
     python ./AquilaDeepFilter/main.py train
 
@@ -186,7 +186,7 @@ d. perform evaluation and report metrics
 
 	python ./post/truvari/truvari_evaluation.py
 
-	    --path_to_folder_with_gradiant_vcf
+	        --path_to_folder_with_gradiant_vcf
             --path_to_folder_with_gradiant_vcf [folder for storing converted vcf files]
             --path_to_output_folder [path to the folder for generated evaluation result]
             --vcf_bench [path to the benchmark giab vcf file]
