@@ -150,7 +150,8 @@ d. perform evaluation and report metrics
 	python ./AquilaDeepFilter/train_test_split.py
 
 		--ratio 0.8 [training set ratio]
-            --input_dir [path to folder with pos/neg folders]
+            --input_dir [path to folder with generated images]
+	    --output_dir [path to output folder with split train/val folders]
 
 	python ./AquilaDeepFilter/main.py train
 
