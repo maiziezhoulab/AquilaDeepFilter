@@ -1,60 +1,59 @@
-#!/usr/bin/python3
-"""
-author:Sanidhya Mangal
-github:sanidhyamangal
-"""
-
 from pathlib import Path
 import random
 import os
+import argparse
+import glob
 
 
-def move_to_test_set(test_path, iterable):
-    if not os.path.exists(test_path):
-        os.mkdir(test_path)
+def split_train_test(namespace, out_dir, ratio):
 
-    for image in iterable:
-        if not os.path.exists(os.path.join(test_path, image.parent.name)):
-            os.mkdir(os.path.join(test_path, image.parent.name))
+    print("project root folder path : ", out_dir)
 
-        NEW_NAME = os.path.join(test_path, image.parent.name, image.name)
-        print(f"Moving {str(image)} ===> {NEW_NAME}")
-        os.rename(image, NEW_NAME)
-
-
-def split_train_test(namespace):
-
-    path_to_images = Path(f"{namespace}")
-
-    _images_root = [path for path in path_to_images.glob("*")]
-    # print(_images_root)
-    # exit(-1)
-    TRAIN_PATH = f"{namespace}_train"
-    TEST_PATH = f"{namespace}_test"
-    # print(TRAIN_PATH, TEST_PATH)
+    TRAIN_PATH = os.path.join(out_dir, 'train')
+    VAL_PATH = os.path.join(out_dir, 'test')
+    print("project train/val folder path : ", TRAIN_PATH, TEST_PATH)
     # exit(-1)
 
+    if not os.path.exists(VAL_PATH):
+        os.mkdir(VAL_PATH)
+    
     if not os.path.exists(TRAIN_PATH):
         os.mkdir(TRAIN_PATH)
+    
+    sub_f = ['positive', 'negative']
+    for f in sub_f:
+        p = os.path.join(namespace, f)
+        _images_root = os.listdir(p)
+        
+        temp = []
+        for image in _images_root:
+            temp.append(os.path.join(p, image))
+            # exit(-1)
+            # if not os.path.exists(os.path.join(TRAIN_PATH, image)):
+            #     os.rename(str(image), os.path.join(TRAIN_PATH, image.name))
+        random.shuffle(temp)
+        
+        train_part = temp[:int(0.8*len(temp))]
+        val_part = temp[1-int(0.8*len(temp)):]
+        
+        cp_out_dir_train = os.path.join(TRAIN_PATH, f)
+        cp_out_dir_val = os.path.join(VAL_PATH, f)
 
-    for image in _images_root:
-        print(image.name)
-        # exit(-1)
-        if not os.path.exists(os.path.join(TRAIN_PATH, image.name)):
-            os.rename(str(image), os.path.join(TRAIN_PATH, image.name))
-
-    path_to_train_images = Path(TRAIN_PATH)
-    _images = [image for image in path_to_train_images.glob("*")]
-
-    test_images = [
-        random.sample([_test_images for _test_images in image.glob("*")], 500)
-        for image in _images
-    ]
-
-    for _test_set in test_images:
-        move_to_test_set(TEST_PATH, _test_set)
+        for e in train_part:
+            os.system("cp " + e + " " + cp_out_dir_train)
+        for e in val_part:
+            os.system("cp " + e + " " + cp_out_dir_val)
 
 
-if __name__ == "__main__":
-    for _namescope in ['/home/yunfei/workspace/shortreads_data/experiment_data_shortreads_del/Aquila_train']:
-        split_train_test(_namescope)
+if __name__ == '__main__':
+    """
+    
+    """
+    parser = argparse.ArgumentParser(description='train/val split script')
+    parser.add_argument('--ratio', required=True, help='ratio for training set')
+    parser.add_argument('--output_dir', required=True, help='path to output folder with split train/val folders')
+    parser.add_argument('--input_dir', required=True, help='path to folder with generated images')
+    
+    args = parser.parse_args()
+    
+    split_train_test(args.input_dir, args.output_dir, args.ratio)
